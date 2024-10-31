@@ -1,0 +1,5 @@
+---
+title: Aufgabenblatt 1
+subtitle: Starke und schwache Form von Randwertproblemen
+---
+

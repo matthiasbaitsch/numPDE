@@ -1,0 +1,75 @@
+---
+title: Aufgabenblatt 2
+subtitle: Approximation von Funktionen
+
+execute: 
+  eval: false
+# engine: julia
+---
+
+## Abschnittsweise quadratische Basisfunktionen
+
+Es lassen sich auch Basisfunktionen definieren, die Abschnittsweise quadratisch sind. Hierzu wird jeweils noch ein Knoten in der Mitte jedes Elements angeordnet. Die Eigenschaft
+
+$$
+  \varphi_i(x_j) =
+  \begin{cases}
+    1 & \text{falls} \quad i = j \\
+    0 & \text{sonst}
+  \end{cases}
+$$
+
+soll weiterhin erfüllt sein. 
+
+Aufgaben:
+
+1. Skizzieren Sie die Basisfunktionen für $N_e = 3$ Elemente gleicher Länge. 
+1. Wie verläuft die Funktion $u_h = \sum \varphi_i\hat u_i$, wenn der Vektor der Knotenwerte mit 
+  $$
+    \hat{\mathbf{u}} = (2, 1.5, 1, 2, 1, 1, 2)
+  $$
+  vorgegeben wird. 
+1. Was können Sie hier über die Differenzierbarkeit von $u_h$ sagen?
+
+Tipp: Schauen Sie sich nochmal die Lagrange-Polynome an. Diese Aufgabe erfordert keinerlei Rechnungen, Skizze reicht!
+
+## Erste Schritte in der FEM mit Julia
+
+Wir verwenden das [`MMJMesh`-Paket](https://github.com/matthiasbaitsch/mmjmesh). Es stellt Möglichkeiten zur Verfügung um
+
+- Finite-Element-Netze zu erzeugen und darzustellen
+- Funktionen als Elemente eines linearen Raums zu behandeln
+
+In einem ersten Schritt soll eine vorgegebene Funktion mithilfe abschnittsweise linearer Basisfunktionen approximiert werden.
+
+**Schritt 1: Installieren und Dokumentation anschauen**
+
+Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie das `MMJMesh`-Paket mithilfe von
+
+```{.julia}
+using Pkg
+Pkg.add(url="https://github.com/matthiasbaitsch/mmjmesh.git")
+```
+
+Danach laden Sie benötigten Pakete
+
+```{.julia}
+using IntervalSets
+using MMJMesh.Plots
+using MMJMesh.Mathematics
+```
+
+Nehmen Sie sich fünf Minuten Zeit um sich in der [Dokumentation](https://matthiasbaitsch.github.io/mmjmesh/guide/) ein wenig umzusehen. Beachten Sie, dass die Dokumentation noch in den Kinderschuhen steckt.
+
+**Schritt 2: Funktion approximieren**
+
+Erzeugen Sie die Funktionen 
+
+$$
+    f, g, h: [0, 4\pi] \to \mathbb{R} \quad \text{mit} \quad f(x) = \cos x, \; g(x) = 1 - \frac{1}{4\pi}x \; \text{und} \; h = f \cdot g
+$$
+
+und plotten Sie die Graphen in einem Koordinatensystem mit `fplot`. Plotten Sie in einem zweiten Koordinatensystem die Ableitungen der Funktionen.
+
+
+
