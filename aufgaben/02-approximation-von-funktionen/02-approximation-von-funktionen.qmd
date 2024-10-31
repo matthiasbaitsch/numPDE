@@ -42,34 +42,84 @@ Wir verwenden das [`MMJMesh`-Paket](https://github.com/matthiasbaitsch/mmjmesh).
 
 In einem ersten Schritt soll eine vorgegebene Funktion mithilfe abschnittsweise linearer Basisfunktionen approximiert werden.
 
-**Schritt 1: Installieren und Dokumentation anschauen**
+Gehen Sie in den folgenden Schritten vor.
 
-Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie das `MMJMesh`-Paket mithilfe von
+1. Installation: Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie das `MMJMesh`-Paket mithilfe von
 
-```{.julia}
-using Pkg
-Pkg.add(url="https://github.com/matthiasbaitsch/mmjmesh.git")
-```
+    ```{.julia}
+    using Pkg
+    Pkg.add(url="https://github.com/matthiasbaitsch/mmjmesh.git")
+    ```
 
-Danach laden Sie benötigten Pakete
+    Danach laden Sie benötigten Pakete
 
-```{.julia}
-using IntervalSets
-using MMJMesh.Plots
-using MMJMesh.Mathematics
-```
+    ```{.julia}
+    using IntervalSets
+    using MMJMesh.Plots
+    using MMJMesh.Mathematics
+    ```
 
-Nehmen Sie sich fünf Minuten Zeit um sich in der [Dokumentation](https://matthiasbaitsch.github.io/mmjmesh/guide/) ein wenig umzusehen. Beachten Sie, dass die Dokumentation noch in den Kinderschuhen steckt.
+    Nehmen Sie sich fünf Minuten Zeit um sich in der [Dokumentation](https://matthiasbaitsch.github.io/mmjmesh/guide/) ein wenig umzusehen. Beachten Sie, dass die Dokumentation noch in den Kinderschuhen steckt.
 
-**Schritt 2: Funktion approximieren**
+1. Funktion: Erzeugen Sie die Funktionen 
 
-Erzeugen Sie die Funktionen 
+    $$
+        f, g, h: [0, 4\pi] \to \mathbb{R} \quad \text{mit} \quad f(x) = \cos x, \; g(x) = 1 - \frac{1}{4\pi}x \; \text{und} \; h = f \cdot g
+    $$
 
-$$
-    f, g, h: [0, 4\pi] \to \mathbb{R} \quad \text{mit} \quad f(x) = \cos x, \; g(x) = 1 - \frac{1}{4\pi}x \; \text{und} \; h = f \cdot g
-$$
+    und plotten Sie die Graphen in einem Koordinatensystem mit `fplot`. Plotten Sie in einem zweiten Koordinatensystem die Ableitungen der Funktionen.
 
-und plotten Sie die Graphen in einem Koordinatensystem mit `fplot`. Plotten Sie in einem zweiten Koordinatensystem die Ableitungen der Funktionen.
+1. Basisfunktionen: Erstellen Sie mithilfe von
+
+    ```{.julia}
+    nodes = range(0, 4π, 5)
+    phis = hatfunctions(nodes)
+    fplot(phis)
+    ```
+
+    die Basisfunktionen zu den Knoten $0, \pi, \dots, 4\pi$.
+
+1. Beispiel für Linearkombination: Bilden Sie mit dem Vektor $\hat{\mathbf{u}} = (0, 0.5, 0.1, 0.5, 0)$ die Linearkombination 
+
+    $$
+        u = \sum_{i=1}^5 \hat{u}_i \varphi_i
+    $$ 
+    
+    und plotten Sie das Ergebnis. 
+    
+    Tipp: Probieren Sie den Code 
+
+    ```{.julia}
+        a = [1, 2, 3]
+        b = [6, 4, 2]
+        a .* b
+        sum(a .* b)
+    ```  
+
+    aus und überlegen Sie, was das helfen könnte.
+
+1. Erzeugen Sie in Julia die Approximation
+
+    $$
+        h_a(x) = \sum_{i=1}^n h(x_i) \varphi(x)
+    $$
+
+    wobei $x_i$ die Stelle des $i$-ten Knotens ist. Plotten Sie $h$ und $h_a$ ein einem Koordinatensystem. Plotten Sie darüber hinaus die Fehlerfunktion $e = h - h_a$.
+
+1. Erstellen Sie eine Julia-Funktion `maxnorm(u)` die eine Approximation zu der Norm
+
+    $$
+        |u|_\mathrm{max} = \max_{a \leq x \leq b} |u(x)|
+    $$
+
+    berechnet. Unterteilen Sie dafür das Intervall, auf dem die Funktion definiert ist in eine große Zahl an Abschnitten. Das Intervall, auf dem eine Funktion `u` definiert ist erhalten Sie mit `domain(u)`.
+
+    Berechnen Sie die Norm des Fehlers $e$.
+
+1. Berechnen und plotten Sie den Fehler $e_k$ mit für $N_k = 2^k$ für $k = 1, \dots, 8$ wobei $N_k$ die Anzahl der Knoten für die Approximation ist.
+
+
+
 
 
 
