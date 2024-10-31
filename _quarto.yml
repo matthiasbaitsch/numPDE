@@ -2,7 +2,7 @@ project:
   output-dir: _output
 
 lang: de
-number-depth: 1
+number-depth: 2
 number-sections: true
 
 format: 
