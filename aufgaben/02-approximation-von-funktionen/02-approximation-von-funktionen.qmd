@@ -45,16 +45,19 @@ In einem ersten Schritt soll eine vorgegebene Funktion mithilfe abschnittsweise 
 
 Gehen Sie in den folgenden Schritten vor.
 
-1. Installation: Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie das `MMJMesh`-Paket mithilfe von
+1. Installation: Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie die Pakete `CairoMakie`, `IntervalSets` sowie `MMJMesh` mithilfe von
 
     ```{.julia}
     using Pkg
+    Pkg.add("CairoMakie")
+    Pkg.add("IntervalSets")
     Pkg.add(url="https://github.com/matthiasbaitsch/mmjmesh.git")
     ```
 
-    Danach laden Sie benötigten Pakete
+    Sie können die Zeilen danach löschen, die Installation muss nur ein mal durchgeführt werden. Danach laden Sie die benötigten Pakete mit
 
     ```{.julia}
+    using CairoMakie
     using IntervalSets
     using MMJMesh.Plots
     using MMJMesh.Mathematics
@@ -70,7 +73,7 @@ Gehen Sie in den folgenden Schritten vor.
 
     und plotten Sie die Graphen in einem Koordinatensystem mit `fplot`. Plotten Sie in einem zweiten Koordinatensystem die Ableitungen der Funktionen.
 
-1. Ändern Sie den Code
+1. Funktionswerte: Ändern Sie den Code
 
     ```{.julia}
         x = [1, 3, 7]
@@ -89,12 +92,13 @@ Gehen Sie in den folgenden Schritten vor.
     ```{.julia}
     nodes = range(0, 4π, 5)
     phis = hatfunctions(nodes)
+
     fplot(phis)
     ```
 
     die Basisfunktionen zu den Knoten $0, \pi, \dots, 4\pi$. Plotten Sie alle die Funktionen $\varphi_1$ und $\varphi_4$ in einem eigenen Koordinatensystem.
 
-1. Beispiel für Linearkombination: Bilden Sie mit dem Vektor $\hat{\mathbf{u}} = (0, 0.5, 0.1, 0.5, 0)$ die Linearkombination 
+1. Linearkombination: Bilden Sie mit dem Vektor $\hat{\mathbf{u}} = (0, 0.5, 0.1, 0.5, 0)$ die Linearkombination 
 
     $$
         u(x) = \sum_{i=1}^5 \hat{u}_i \cdot \varphi_i(x)
@@ -105,15 +109,15 @@ Gehen Sie in den folgenden Schritten vor.
     Tipp: Probieren Sie den Code 
 
     ```{.julia}
-        a = [1, 2, 3]
-        b = [6, 4, 2]
-        a .* b
-        sum(a .* b)
+    a = [1, 2, 3]
+    b = [6, 4, 2]
+    a .* b
+    sum(a .* b)
     ```  
 
     aus und überlegen Sie, was das helfen könnte.
 
-1. Erzeugen Sie in Julia die Approximation
+1. Approximation: Erzeugen Sie in Julia die Approximation
 
     $$
         h_a(x) = \sum_{i=1}^n h(x_i) \cdot \varphi(x)
@@ -121,17 +125,57 @@ Gehen Sie in den folgenden Schritten vor.
 
     wobei $x_i$ die Stelle des $i$-ten Knotens ist. Plotten Sie $h$ und $h_a$ ein einem Koordinatensystem. Plotten Sie darüber hinaus die Fehlerfunktion $e = h - h_a$.
 
-1. Erstellen Sie eine Julia-Funktion `maxnorm(u)` die eine Approximation zu der Norm
+1. Norm: Erstellen Sie eine Julia-Funktion `maxnorm(u)` die eine Approximation zu der Norm
 
     $$
         |u|_\mathrm{max} = \max_{a \leq x \leq b} |u(x)|
     $$
 
-    berechnet. Unterteilen Sie dafür das Intervall, auf dem die Funktion definiert ist in eine große Zahl an Abschnitten. Das Intervall, auf dem eine Funktion `u` definiert ist erhalten Sie mit `domain(u)`.
+    berechnet. Unterteilen Sie dafür das Intervall, auf dem die Funktion definiert ist in eine große Zahl an Abschnitten. 
 
     Berechnen Sie die Norm des Fehlers $e$.
 
-1. Berechnen und plotten Sie den Fehler $e_k$ mit für $N_k = 2^k$ für $k = 1, \dots, 8$ wobei $N_k$ die Anzahl der Knoten für die Approximation ist.
+    Tipps:
+
+    - Die Definitionsmenge einer Funktion `u` erhalten Sie mit `domain(u)`
+    - Mit `range(0 .. 2, 101)` unterteilen Sie das Intervall $[0, 2]$ in 100 Abschnitte
+    - Den Absolutwert einer Zahl berechnet man mit `abs`. Wie könnte das für einen Vektor gehen?
+    - Die Funktion `maximum(v)` gibt das größte Element im Vektor `v` zurück
+
+1. Konvergenz: Es soll untersucht werden, wie sich der Fehler verhält, wenn Sie die Anzahl der Basisfunktionen erhöhen. Erstellen Sie dafür eine Funktion `error(Ne)`, die den Approximationsfehler für `Ne` Elemente berechnet. Berechnen Sie den Fehler für $N_e = 4, 8, \dots, 2^10$. Plotten Sie den Fehler über
+
+    - die Anzahl der Elemente $N_e$ sowie
+    - die Elementgröße $h = 4\pi / N_e$.
+
+    Stellen Sie beide Ergebnisse zusätzlich noch in einer [doppelt-logarithmischen Skala](https://docs.makie.org/stable/reference/blocks/axis#xscale) dar
+
+    Tipps: 
+
+    - Die `Makie` Funktion `scatterlines(xs, ys)` plottet den Verlauf mit Punkten und Linien.
+    - Hier die Monome 
+    
+      $$
+        m_k : [10^{-5}, 1] \to \mathbb{R}, \quad m_k(x) = x^k, \quad k = 1, \dots, 4
+      $$ 
+    
+      einmal mit 'normaler' Skalierung
+
+      ```{.julia}
+      mks = monomials(1:4, 1e-5 .. 1)
+      fplot(mks...)
+      ```
+
+      und in einer doppelt-logarithmischer Skala
+
+      ```{.julia}
+      f = Figure()
+      Axis(f[1,1], xscale=log10, yscale=log10)
+      fplot!(mks...)
+      f
+      ```
+
+      Die Punkte hinter `mks` besprechen wir später mal.
+    
 
 
 
