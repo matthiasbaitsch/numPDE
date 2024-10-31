@@ -29,6 +29,7 @@ Aufgaben:
     \hat{\mathbf{u}} = (2, 1.5, 1, 2, 1, 1, 2)
   $$
   vorgegeben wird. 
+
 1. Was können Sie hier über die Differenzierbarkeit von $u_h$ sagen?
 
 Tipp: Schauen Sie sich nochmal die Lagrange-Polynome an. Diese Aufgabe erfordert keinerlei Rechnungen, Skizze reicht!
@@ -69,6 +70,20 @@ Gehen Sie in den folgenden Schritten vor.
 
     und plotten Sie die Graphen in einem Koordinatensystem mit `fplot`. Plotten Sie in einem zweiten Koordinatensystem die Ableitungen der Funktionen.
 
+1. Ändern Sie den Code
+
+    ```{.julia}
+        x = [1, 3, 7]
+        y = 0 * x
+        p = fplot(h)
+        scatter!(x, y, color=:tomato)
+        p 
+    ```
+
+    so ab, dass die Tomaten auf dem Graphen von $h$ liegen. 
+    
+    Tipp: Mit `sin.([0, pi/2])` berechnen Sie den Sinus für die Stellen $0$ und $\pi/2$.
+
 1. Basisfunktionen: Erstellen Sie mithilfe von
 
     ```{.julia}
@@ -77,12 +92,12 @@ Gehen Sie in den folgenden Schritten vor.
     fplot(phis)
     ```
 
-    die Basisfunktionen zu den Knoten $0, \pi, \dots, 4\pi$.
+    die Basisfunktionen zu den Knoten $0, \pi, \dots, 4\pi$. Plotten Sie alle die Funktionen $\varphi_1$ und $\varphi_4$ in einem eigenen Koordinatensystem.
 
 1. Beispiel für Linearkombination: Bilden Sie mit dem Vektor $\hat{\mathbf{u}} = (0, 0.5, 0.1, 0.5, 0)$ die Linearkombination 
 
     $$
-        u = \sum_{i=1}^5 \hat{u}_i \varphi_i
+        u(x) = \sum_{i=1}^5 \hat{u}_i \cdot \varphi_i(x)
     $$ 
     
     und plotten Sie das Ergebnis. 
@@ -101,7 +116,7 @@ Gehen Sie in den folgenden Schritten vor.
 1. Erzeugen Sie in Julia die Approximation
 
     $$
-        h_a(x) = \sum_{i=1}^n h(x_i) \varphi(x)
+        h_a(x) = \sum_{i=1}^n h(x_i) \cdot \varphi(x)
     $$
 
     wobei $x_i$ die Stelle des $i$-ten Knotens ist. Plotten Sie $h$ und $h_a$ ein einem Koordinatensystem. Plotten Sie darüber hinaus die Fehlerfunktion $e = h - h_a$.
