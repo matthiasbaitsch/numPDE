@@ -27,7 +27,7 @@ jobs:
         with:
           tinytex: true
       - name: Quarto render assignments
-        run: quarto render aufgaben
+        run: quarto render aufgaben -t html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
