@@ -142,7 +142,7 @@ Gehen Sie in den folgenden Schritten vor.
     - Den Absolutwert einer Zahl berechnet man mit `abs`. Wie könnte das für einen Vektor gehen?
     - Die Funktion `maximum(v)` gibt das größte Element im Vektor `v` zurück
 
-1. Konvergenz: Es soll untersucht werden, wie sich der Fehler verhält, wenn Sie die Anzahl der Basisfunktionen erhöhen. Erstellen Sie dafür eine Funktion `error(Ne)`, die den Approximationsfehler für `Ne` Elemente berechnet. Berechnen Sie den Fehler für $N_e = 4, 8, \dots, 2^10$. Plotten Sie den Fehler über
+1. Konvergenz: Es soll untersucht werden, wie sich der Fehler verhält, wenn Sie die Anzahl der Basisfunktionen erhöhen. Erstellen Sie dafür eine Funktion `error(Ne)`, die den Approximationsfehler für `Ne` Elemente berechnet. Berechnen Sie den Fehler für $N_e = 4, 8, \dots, 2^{10}$. Plotten Sie den Fehler über
 
     - die Anzahl der Elemente $N_e$ sowie
     - die Elementgröße $h = 4\pi / N_e$.
