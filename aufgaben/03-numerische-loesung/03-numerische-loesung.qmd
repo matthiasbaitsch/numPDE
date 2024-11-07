@@ -126,7 +126,7 @@ Kontrollieren Sie, ob die Funktion $u$ wirklich das Randwertproblem löst. Plott
 Geben Sie die Bilinear- und Linearform der schwachen Formulierung des Problems ein. Hier eine Idee, wie das funktioniert:
 
 ```{.julia}
-a(u, δu) = integrate(u' * δu')
+a(u, δu) = integrate(u' * δu', p.Ω)
 ```
 
 Überprüfen Sie für die Funktionen
