@@ -185,7 +185,7 @@ Plotten Sie darüber hinaus die Näherung für die Normalkraft $N_h$ sowie den F
 1. Fehler in max-Norm: Berechnen und plotten Sie den prozentualen Fehler
 
     $$
-    100 \frac{\|u - u_h\|_\infty}{\|u\|_\infty}
+    100 \frac{\|u - u_h\|_\mathrm{max}}{\|u\|_\mathrm{max}}
     $$
 
     für $k = 2, 4, 8, \dots, 2^5$ Elemente.

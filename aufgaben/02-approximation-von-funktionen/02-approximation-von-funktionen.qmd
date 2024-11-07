@@ -128,7 +128,7 @@ Gehen Sie in den folgenden Schritten vor.
 1. Norm: Erstellen Sie eine Julia-Funktion `maxnorm(u)` die eine Approximation zu der Norm
 
     $$
-        |u|_\mathrm{max} = \max_{a \leq x \leq b} |u(x)|
+        \|u\|_\mathrm{max} = \max_{a \leq x \leq b} |u(x)|
     $$
 
     berechnet. Unterteilen Sie dafür das Intervall, auf dem die Funktion definiert ist in eine große Zahl an Abschnitten. 
