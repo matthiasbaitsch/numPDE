@@ -120,7 +120,7 @@ Gehen Sie in den folgenden Schritten vor.
 1. Approximation: Erzeugen Sie in Julia die Approximation
 
     $$
-        h_a(x) = \sum_{i=1}^n h(x_i) \cdot \varphi(x)
+        h_a(x) = \sum_{i=1}^n h(x_i) \cdot \varphi_i(x)
     $$
 
     wobei $x_i$ die Stelle des $i$-ten Knotens ist. Plotten Sie $h$ und $h_a$ ein einem Koordinatensystem. Plotten Sie darüber hinaus die Fehlerfunktion $e = h - h_a$.
@@ -147,7 +147,7 @@ Gehen Sie in den folgenden Schritten vor.
     - die Anzahl der Elemente $N_e$ sowie
     - die Elementgröße $h = 4\pi / N_e$.
 
-    Stellen Sie beide Ergebnisse zusätzlich noch in einer [doppelt-logarithmischen Skala](https://docs.makie.org/stable/reference/blocks/axis#xscale) dar
+    Stellen Sie beide Ergebnisse zusätzlich noch in einer [doppelt-logarithmischen Skala](https://docs.makie.org/stable/reference/blocks/axis#xscale) dar.
 
     Tipps: 
 
