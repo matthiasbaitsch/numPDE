@@ -168,24 +168,24 @@ Plotten Sie darüber hinaus die Näherung für die Normalkraft $N_h$ sowie den F
 
 1. Fehlerfunktion: Plotten Sie die Fehlerfunktion $e = u - u_h$ für $k = 2, 4, 8, \dots, 2^5$ Elemente.
 
-  Tipp:
+    Tipp:
 
-  ```{.julia}
-  2 .^ (1:5)
-  ```
+    ```{.julia}
+    2 .^ (1:5)
+    ```
 
 1. Normalkraft: Stellen Sie in einem Plot die approximierte Normalkraft $N_h$ für $k = 2, 4, 8, \dots, 2^5$ Elemente zusammen mit der exakten Lösung $N$ dar. Wie erklären Sie sich den Verlauf?
 
-  Tipp: Eine besser lesbare Darstellung erhalten Sie mit
+    Tipp: Eine besser lesbare Darstellung erhalten Sie mit
 
-  ```{.julia}
-  fplot!(Nh, connect_jumps=true)
-  ```
+    ```{.julia}
+    fplot!(Nh, connect_jumps=true)
+    ```
 
 1. Fehler in max-Norm: Berechnen und plotten Sie den prozentualen Fehler
 
-  $$
-  100 \frac{\|u - u_h\|_\infty}{\|u\|_\infty}
-  $$
+    $$
+    100 \frac{\|u - u_h\|_\infty}{\|u\|_\infty}
+    $$
 
-  für $k = 2, 4, 8, \dots, 2^5$ Elemente.
+    für $k = 2, 4, 8, \dots, 2^5$ Elemente.
