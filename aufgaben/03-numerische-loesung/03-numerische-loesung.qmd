@@ -19,7 +19,7 @@ Wir lösen das Bohrpfahlproblem mit der Finite-Elemente-Methode für die folgend
 
 $$
     \begin{split}
-      E & = \SI{35e9}{\newton\per\metre\squared}
+      E & = \SI{35 \cdot 10^9}{\newton\per\metre\squared}
       &
       d & = \SI{0.8}{\metre}
       &
@@ -85,30 +85,30 @@ Für den Bohrpfahl lässt sich die Lösungsfunktion analytisch bestimmen, zum Be
 
 $$
 \begin{multlined}
-u(x) 
-= 
-\frac
-{\exp(-x/20)}
-{3500000 \cdot \pi \cdot  \left(a_1 \cdot \exp(2) - a_2\right)}
-\cdot
- \bigg(
-  25000 \cdot \big(a_1 \cdot \exp(2) + a_2 \cdot \exp(x/10)\big)
-  \\[1em]
-  - 2943 \cdot \pi \cdot \exp(1) \cdot \big(\exp(x/10) + 1\big)
-  \\[1em]
-  + 981 \cdot \pi \cdot \exp(x/20) \cdot \big(a_1 \cdot \exp(2) - a_2\big)
-\bigg).
+  u(x) 
+  = 
+  \frac
+  {\exp(-x/20)}
+  {3500000 \cdot \pi \cdot  \left(a_1 \cdot \exp(2) - a_2\right)}
+  \cdot
+  \bigg(
+    25000 \cdot \big(a_1 \cdot e^2 + a_2 \cdot \exp(x/10)\big)
+    \\[1em]
+    - 2943 \cdot \pi \cdot e \cdot \big(\exp(x/10) + 1\big)
+    \\[1em]
+    + 981 \cdot \pi \cdot \exp(x/20) \cdot \big(a_1 \cdot e^2 - a_2\big)
+  \bigg).
 \end{multlined}
 $$
 
-wobei $a_1 = 3 + 7 \pi$ und $a_2 = 7\pi - 3$ gelten soll.
+wobei $a_1 = 3 + 7 \pi$ und $a_2 = 7\pi - 3$ gelten soll. Die Eulersche Zahl $e$ geben Sie mit `\\euler Tab` ein.
 
 Geben Sie die exakte Lösung in ihr Notebook ein. Sie können den folgenden Code als Ausgangspunkt verwenden:
 
 ```{.julia}
 a1 = 99
 a2 = 99
-x = variable(p.Ω)
+x = parameter(p.Ω)
 
 u = exp(x/20) + exp(-x/10)
 
@@ -119,7 +119,7 @@ Plotten Sie zusätzlich die Normalkraft $N = EA \cdot u'$.
 
 ## Kontrolle starke Form
 
-Kontrollieren Sie, ob die Funktion $u$ wirklich das Randwertproblem löst. Plotten Sie hierzu das Residuum $EA u'' - C u + n$ und überprüfen Sie, ob die Randbedingungen eingehalten sind.
+Kontrollieren Sie, ob die Funktion $u$ wirklich das Randwertproblem löst. Plotten Sie hierzu das Residuum $EA u'' - C u + n$ und überprüfen Sie, ob die Randbedingungen erfüllt sind.
 
 ## Schwache Form und Kontrolle
 
@@ -132,7 +132,7 @@ a(u, δu) = integrate(u' * δu', p.Ω)
 Überprüfen Sie für die Funktionen
 
 ```{.julia}
-x = variable(p.Ω)
+x = parameter(p.Ω)
 δu1 = sin(x)
 δu2 = x
 δu3 = Polynomial([0, 0, 1])
@@ -185,7 +185,7 @@ Plotten Sie darüber hinaus die Näherung für die Normalkraft $N_h$ sowie den F
 1. Fehler in max-Norm: Berechnen und plotten Sie den prozentualen Fehler
 
     $$
-    100 \frac{\|u - u_h\|_\mathrm{max}}{\|u\|_\mathrm{max}}
+    100 \cdot \frac{\|u - u_h\|_\mathrm{max}}{\|u\|_\mathrm{max}}
     $$
 
     für $k = 2, 4, 8, \dots, 2^5$ Elemente.
