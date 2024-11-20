@@ -31,7 +31,7 @@ jobs:
       - name: Scaffolding for 04
         run: |
           cp loesungen/04-elementweise-berechnung-geruest.qmd _output/04-elementweise-berechnung.qmd
-          quarto convert _output/04-elementweise-berechnung.qmd
+          cp loesungen/04-elementweise-berechnung-geruest.ipynb _output/04-elementweise-berechnung.ipynb
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

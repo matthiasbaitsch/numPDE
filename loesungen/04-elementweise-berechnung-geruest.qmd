@@ -1,6 +1,6 @@
 ---
 title: Aufgabenblatt 4
-jupyter: julia
+jupyter: julia-1.10
 ---
 
 ```{julia}
