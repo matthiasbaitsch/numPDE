@@ -25,7 +25,7 @@ Leiten Sie (analog zur globalen Steifigkeitsmatrix) die Assemblierung des global
 
 ## Programmierung
 
-Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als Jupyter-Notebook  oder qmd-Datei herunter.
+Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als [Jupyter-Notebook](04-elementweise-berechnung.ipynb)  oder [Quarto-Datei](04-elementweise-berechnung.qmd) herunter.
 
 ### Berechnung für ein Element
 
