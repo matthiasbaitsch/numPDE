@@ -1,10 +1,6 @@
 ---
 title: Aufgabenblatt 2
 subtitle: Approximation von Funktionen
-
-execute: 
-  eval: false
-# engine: julia
 ---
 
 ## Abschnittsweise quadratische Basisfunktionen
