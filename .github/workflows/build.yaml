@@ -30,7 +30,7 @@ jobs:
         run: quarto render aufgaben -t html
       - name: Scaffolding for 04
         run: |
-          cp aufgaben-loesung/04-elementweise-berechnung/04-elementweise-berechnung-geruest.qmd _output/04-elementweise-berechnung.qmd
+          cp loesungen/04-elementweise-berechnung-geruest.qmd _output/04-elementweise-berechnung.qmd
           quarto convert _output/04-elementweise-berechnung.qmd
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
