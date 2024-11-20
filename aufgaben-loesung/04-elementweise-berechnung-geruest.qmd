@@ -1,0 +1,94 @@
+---
+title: Aufgabenblatt 4
+jupyter: julia
+---
+
+```{julia}
+# Einmal ausführen
+# using Pkg
+# Pkg.update("MMJMesh")
+
+using DotMaps
+import CairoMakie
+using IntervalSets
+
+using MMJMesh.Plots
+using MMJMesh.Meshes
+```
+
+Problemparameter
+
+```{julia}
+p = DotMap()
+p.E = 35e9
+p.d = 0.8
+p.l = 20
+p.F = 2e6
+p.ρ = 2500
+p.g = 9.81
+p.S = 120e6
+p.c = 1.75e7
+p.Ω = 0 .. p.l
+p.C = p.c * π * p.d
+p.A = π * p.d^2 / 4
+p.EA = p.E * p.A
+p.n = p.ρ * p.g * p.A;
+```
+
+Netz zum Testen
+
+```{julia}
+m = Mesh(p.Ω, 4)
+mplot(m) |> mconf()
+```
+
+## Steifigkeitsmatrix und Lastvektor für ein Element
+
+### Steifigkeitsmatrix
+
+```{julia}
+function pile_ke(EA, C)
+    function kefunc(e)
+        # TODO: Ke berechnen
+        println("h = ", length(e))
+        return 99
+    end
+    return kefunc
+end
+
+kef = pile_ke(p.EA, p.C)
+kef(element(m, 1))
+```
+
+### Lastvektor
+
+```{julia}
+# TODO: Lastvektor analog zur Steifigkeitsmatrix
+```
+
+## Assemblierungsmatrix und Indexvektor
+
+```{julia}
+# TODO Siehe Aufgabenstellung
+```
+
+## Lineares Gleichungssystem
+
+```{julia}
+function assemble_kr(m::Mesh)
+    for e = elements(m)
+        kef = e.data[:kefunc]
+        Ke = kef(e)
+        println(Ke)
+    end
+    return 1, 2
+end
+
+# Eigenschaften :kefunc und :refunc für alle Elemente definieren
+m.data[:kefunc, :elements] = pile_ke(p.EA, p.C)
+# m.data[:refunc, :elements] = pile_re(p.n)
+
+K, r = assemble_kr(m)
+```
+
+Wird noch ergänzt

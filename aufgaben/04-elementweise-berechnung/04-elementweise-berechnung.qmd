@@ -1,0 +1,67 @@
+---
+title: Aufgabenblatt 4
+subtitle: Elementweise Berechnung
+---
+
+## Assemblierung des linearen Gleichungssystems
+
+### Basisfunktionen und Elementfunktionen
+
+Elemente und Knoten müssen nicht zwangsläufig fortlaufend nummeriert sein. Stellen Sie für das (originell nummerierte) Netz
+
+![](bilder/mesh.svg)
+
+die Assemblierungsmatrizen $\mathbf{A}^e, \; e = 1, \dots, 4$ auf. Skizzieren Sie hierfür die Basisfunktionen $\varphi_i, \; i = 1, \dots, 5$ und die Elementfunktionen $N^e_k, \; k = 1, 2$.
+
+Können Sie das Schema erkennen, nach dem die Einsen in den Matrizen platziert werden? Schreiben sie hierzu für jedes Element in einem Spaltenvektor die Knotennummern neben die Matrix.
+
+### Steifigkeitsmatrix und Lastvektor für ein Element
+
+Bestimmen Sie für den Bohrpfahl die Elementsteifigkeitsmatrix $\mathbf{K}^e$ und den Elementlastvektor $\mathbf{r}^e}$ für ein Element der Länge $h$.
+
+### Globaler Lastvektor
+
+Leiten Sie (analog zur globalen Steifigkeitsmatrix) die Assemblierung des globalen Lastvektors $\mathbf{r}$ her.
+
+## Programmierung
+
+Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als Jupyter-Notebook  oder qmd-Datei herunter.
+
+### Berechnung für ein Element
+
+Implementieren Sie die Funktionen `pileKe(EA, C)`, `pileRe(n)` für die Elementmatrix und den Elementlastvektor.
+
+Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pileKe` und `pileRe` jeweils eine Funktion zurück, die für eine Element die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier bitte ein bisschen Geduld haben, das wird sich klären.
+
+### Assemblierungsmatrix und Indexvektor
+
+Addition einer Untermatrix mit Indexvektor. Erklären Sie die Arbeitsweise der folgenden Zeilen Julia-Code:
+
+```{.julia}
+K = reshape(collect(1:16), 4, 4)
+Ke = [100 200; 300 400]  
+
+display(K)
+display(Ke)
+display(K[I, I])
+
+I = [4, 1]
+K[I, I] += Ke
+
+display(K)
+```
+
+Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten:
+
+```{.julia}
+K = reshape(collect(1:16), 4, 4)
+Ke = [100 200; 300 400]  
+Ae = [0 0 0 0; 0 0 0 0]
+K += Ae' * Ke * Ae
+
+display(K)
+```
+
+### Lineares Gleichungssystem
+
+Erstellen Sie die Funktion `assembleKr(s)`, um das lineare Gleichungssystem aufzubauen. Feder und Einzellast sollen an dieser Stelle nicht berücksichtigt werden.
