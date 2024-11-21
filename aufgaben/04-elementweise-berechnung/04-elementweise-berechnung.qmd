@@ -143,4 +143,4 @@ Verschieben Sie die Funktionen für den Bohrpfahl in eine Datei `pile.jl` und di
 
 ### Berechnung
 
-Kopieren Sie ihr Notebook für das vorherige Aufgabenblatt und ändern Sie die Funktion `pile_fem` dahingehend, dass die Berechnung von $\hat{\mathbf{u}}$ mithilfe der Funktionen aus diesem Aufgabenblatt erfolgt.
+Kopieren Sie ihr Notebook für das vorherige Aufgabenblatt und ändern Sie die Funktion `pile_fem` dahingehend, dass die Berechnung von $\hat{\mathbf{u}}$ mithilfe der Funktionen aus diesem Aufgabenblatt erfolgt. An dieser Stelle müssen Sie Federsteifigkeit und Einzellast einbauen.
