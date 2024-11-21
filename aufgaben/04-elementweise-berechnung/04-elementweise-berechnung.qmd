@@ -137,4 +137,8 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 Erstellen und testen Sie die Funktion `assemble_kr(m)`, die für ein Netz `m` die globale Steifigkeitsmatrix $\mathbf{K}$ und den globalen Lastvektor $\mathbf{r}$ zurück gibt. Feder und Einzellast sollen an dieser Stelle noch nicht berücksichtigt werden.
 
+### Organisation
+
+Verschieben Sie die Funktionen für den Bohrpfahl in eine Datei `pile.jl` und die Funktion für das LGS in eine Datei `fem.jl`. Stellen Sie sicher, dass ihr Notebook nach wie vor ausgeführt werden kann.
+
 Wird noch ergänzt
