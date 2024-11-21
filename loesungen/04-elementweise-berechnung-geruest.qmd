@@ -7,8 +7,8 @@ Pakete einbinden
 
 ```{julia}
 # Einmal ausführen, danach auskommentieren
-using Pkg
-Pkg.update("MMJMesh")
+# using Pkg
+# Pkg.update("MMJMesh")
 
 using DotMaps
 import CairoMakie
@@ -18,29 +18,10 @@ using MMJMesh.Plots
 using MMJMesh.Meshes
 ```
 
-Problemparameter
-
-```{julia}
-p = DotMap()
-p.E = 35e9
-p.d = 0.8
-p.l = 20
-p.F = 2e6
-p.ρ = 2500
-p.g = 9.81
-p.S = 120e6
-p.c = 1.75e7
-p.Ω = 0 .. p.l
-p.C = p.c * π * p.d
-p.A = π * p.d^2 / 4
-p.EA = p.E * p.A
-p.n = p.ρ * p.g * p.A;
-```
-
 Beispiel für FE-Netz
 
 ```{julia}
-m = Mesh(p.Ω, 40)
+m = Mesh(0 .. 20, 40)
 mplot(m) |> mconf()
 ```
 

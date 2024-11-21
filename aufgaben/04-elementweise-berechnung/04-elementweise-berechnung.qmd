@@ -54,7 +54,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 1. Ein Element des FE-Netzes
 
     ```{.julia}
-    m = Mesh(p.Ω, 400)
+    m = Mesh(0 .. 20, 400)
     e2 = element(m, 2)
     println(e2)
     println(length(e2))
@@ -113,7 +113,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 1. Schleife über Elemente
 
     ```{.julia}
-    m = Mesh(p.Ω, 4)
+    m = Mesh(0 .. 20, 4)
     for e = elements(m)
         printl(e)
     end
@@ -122,7 +122,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 1. Funktion mit Elementen assoziieren
 
     ```{.julia}
-    m = Mesh(p.Ω, 4)
+    m = Mesh(0 .. 20, 4)
     e3 = element(m, 3)
     m.data[:test, :elements] = sqrt
 
@@ -141,4 +141,6 @@ Erstellen und testen Sie die Funktion `assemble_kr(m)`, die für ein Netz `m` di
 
 Verschieben Sie die Funktionen für den Bohrpfahl in eine Datei `pile.jl` und die Funktion für das LGS in eine Datei `fem.jl`. Stellen Sie sicher, dass ihr Notebook nach wie vor ausgeführt werden kann.
 
-Wird noch ergänzt
+### Berechnung
+
+Kopieren Sie ihr Notebook für das vorherige Aufgabenblatt und ändern Sie die Funktion `pile_fem` dahingehend, dass die Berechnung von $\hat{\mathbf{u}}$ mithilfe der Funktionen aus diesem Aufgabenblatt erfolgt.
