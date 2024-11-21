@@ -17,51 +17,124 @@ Können Sie das Schema erkennen, nach dem die Einsen in den Matrizen platziert w
 
 ### Steifigkeitsmatrix und Lastvektor für ein Element
 
-Bestimmen Sie für den Bohrpfahl die Elementsteifigkeitsmatrix $\mathbf{K}^e$ und den Elementlastvektor $\mathbf{r}^e}$ für ein Element der Länge $h$.
+Bestimmen Sie für den Bohrpfahl die Elementsteifigkeitsmatrix $\mathbf{K}^e$ und den Elementlastvektor $\mathbf{r}^e$ für ein Element der Länge $h$.
 
 ### Globaler Lastvektor
 
 Leiten Sie (analog zur globalen Steifigkeitsmatrix) die Assemblierung des globalen Lastvektors $\mathbf{r}$ her.
 
+### Feder und Einzellast
+
+Nach welchem Schema können eine Feder und eine Einzellast im linearen Gleichungssystem berücksichtigt werden?
+
 ## Programmierung
 
-Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als [Jupyter-Notebook](04-elementweise-berechnung.ipynb)  oder [Quarto-Datei](04-elementweise-berechnung.qmd) herunter.
+Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als [Jupyter-Notebook](04-elementweise-berechnung-t1.ipynb)  oder [Quarto-Datei](04-elementweise-berechnung-t1.qmd) herunter.
+
+### Vorbereitung
+
+Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
+
+1. Parametrisierte Funktion
+
+    ```{.julia}
+    function bsin(b)
+        function f(x)
+            return b * sin(x)
+        end
+        return f
+    end
+
+    f1 = bsin(1)
+    f2 = bsin(5)
+
+    println("f1(π/2) = ", f1(π / 2), ", f2(π/2) = ", f2(π / 2))
+    ```
+
+1. Ein Element des FE-Netzes
+
+    ```{.julia}
+    m = Mesh(p.Ω, 400)
+    e2 = element(m, 2)
+    println(e2)
+    println(length(e2))
+    ```
 
 ### Berechnung für ein Element
 
-Implementieren Sie die Funktionen `pileKe(EA, C)`, `pileRe(n)` für die Elementmatrix und den Elementlastvektor.
+Implementieren Sie die Funktionen `pile_ke(EA, C)`, `pile_re(n)` für die Elementmatrix und den Elementlastvektor.
 
-Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pileKe` und `pileRe` jeweils eine Funktion zurück, die für eine Element die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier bitte ein bisschen Geduld haben, das wird sich klären.
+Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pile_ke(e)` und `pile_re(e)` jeweils eine Funktion zurück, die für eine Element `e` die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier bitte ein bisschen Geduld haben, das wird sich klären.
 
-### Assemblierungsmatrix und Indexvektor
+### Vorbereitung
 
-Addition einer Untermatrix mit Indexvektor. Erklären Sie die Arbeitsweise der folgenden Zeilen Julia-Code:
+Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
-```{.julia}
-K = reshape(collect(1:16), 4, 4)
-Ke = [100 200; 300 400]  
+1. Funktion mit zwei Rückgabewerten
 
-display(K)
-display(Ke)
-display(K[I, I])
+    ```{.julia}
+    function test(x)
+        return x, x^2
+    end
 
-I = [4, 1]
-K[I, I] += Ke
+    a, b = test(2)
+    println("a = ", a, ", b = ", b)
+    ```
 
-display(K)
-```
+1. Addition einer Untermatrix mit Indexvektor:
 
-Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten:
+    ```{.julia}
+    K = reshape(collect(1:16), 4, 4)
+    Ke = [100 200; 300 400]  
 
-```{.julia}
-K = reshape(collect(1:16), 4, 4)
-Ke = [100 200; 300 400]  
-Ae = [0 0 0 0; 0 0 0 0]
-K += Ae' * Ke * Ae
+    display(K)
+    display(Ke)
+    display(K[I, I])
 
-display(K)
-```
+    I = [4, 1]
+    K[I, I] += Ke
+
+    display(K)
+    ```
+
+    Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten:
+
+    ```{.julia}
+    K = reshape(collect(1:16), 4, 4)
+    Ke = [100 200; 300 400]  
+    Ae = [0 0 0 0; 0 0 0 0]
+    K += Ae' * Ke * Ae
+
+    display(K)
+    ```
+
+    Wie addieren Sie die Elementsteifigkeitsmatrizen zur globalen Matrix hinzu?
+
+1. Schleife über Elemente
+
+    ```{.julia}
+    m = Mesh(p.Ω, 4)
+    for e = elements(m)
+        printl(e)
+    end
+    ```
+
+1. Funktion mit Elementen assoziieren
+
+    ```{.julia}
+    m = Mesh(p.Ω, 4)
+    e3 = element(m, 3)
+    m.data[:test, :elements] = sqrt
+
+    f = e3.data[:test]
+    f(4)
+    ```
+
+    Wie können Sie diese Idee für die Assemblierung des linearen Gleichungssystems nutzen?
+
 
 ### Lineares Gleichungssystem
 
-Erstellen Sie die Funktion `assembleKr(s)`, um das lineare Gleichungssystem aufzubauen. Feder und Einzellast sollen an dieser Stelle nicht berücksichtigt werden.
+Erstellen und testen Sie die Funktion `assemble_kr(m)`, die für ein Netz `m` die globale Steifigkeitsmatrix $\mathbf{K}$ und den globalen Lastvektor $\mathbf{r}$ zurück gibt. Feder und Einzellast sollen an dieser Stelle noch nicht berücksichtigt werden.
+
+Wird noch ergänzt

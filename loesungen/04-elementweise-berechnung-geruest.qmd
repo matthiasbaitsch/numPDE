@@ -3,10 +3,12 @@ title: Aufgabenblatt 4
 jupyter: julia-1.10
 ---
 
+Pakete einbinden
+
 ```{julia}
-# Einmal ausführen
-# using Pkg
-# Pkg.update("MMJMesh")
+# Einmal ausführen, danach auskommentieren
+using Pkg
+Pkg.update("MMJMesh")
 
 using DotMaps
 import CairoMakie
@@ -35,60 +37,39 @@ p.EA = p.E * p.A
 p.n = p.ρ * p.g * p.A;
 ```
 
-Netz zum Testen
+Beispiel für FE-Netz
 
 ```{julia}
-m = Mesh(p.Ω, 4)
+m = Mesh(p.Ω, 40)
 mplot(m) |> mconf()
 ```
 
+## Vorbereitung
+
+Siehe Aufgabenstellung
+
 ## Steifigkeitsmatrix und Lastvektor für ein Element
 
-### Steifigkeitsmatrix
+Elementsteifigkeitsmatrix
 
 ```{julia}
-function pile_ke(EA, C)
-    function kefunc(e)
-        # TODO: Ke berechnen
-        println("h = ", length(e))
-        return 99
-    end
-    return kefunc
-end
-
-kef = pile_ke(p.EA, p.C)
-kef(element(m, 1))
+# TODO: pile_ke implementieren und testen
 ```
 
-### Lastvektor
+Elementlastvektor
 
 ```{julia}
 # TODO: Lastvektor analog zur Steifigkeitsmatrix
 ```
 
-## Assemblierungsmatrix und Indexvektor
+## Vorbereitung
 
-```{julia}
-# TODO Siehe Aufgabenstellung
-```
+Siehe Aufgabenstellung
 
 ## Lineares Gleichungssystem
 
 ```{julia}
-function assemble_kr(m::Mesh)
-    for e = elements(m)
-        kef = e.data[:kefunc]
-        Ke = kef(e)
-        println(Ke)
-    end
-    return 1, 2
-end
-
-# Eigenschaften :kefunc und :refunc für alle Elemente definieren
-m.data[:kefunc, :elements] = pile_ke(p.EA, p.C)
-# m.data[:refunc, :elements] = pile_re(p.n)
-
-K, r = assemble_kr(m)
+# TODO: assemble_kr implementieren und testen
 ```
 
-Wird noch ergänzt
+
