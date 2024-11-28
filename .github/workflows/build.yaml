@@ -18,26 +18,25 @@ jobs:
     steps:
       - name: Install required command line tools
         run: sudo apt-get install librsvg2-bin
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.10.5'
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+      - name: Install Julia Dependencies
+        run: julia install-dependencies.jl
       - name: Check out
         uses: actions/checkout@v2
         with:
           submodules: recursive
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          tinytex: true
       - name: Quarto render assignments
         run: quarto render aufgaben -t html
-      - name: Scaffolding for 04
-        run: |
-          cp loesungen/04-elementweise-berechnung-geruest.qmd   _output/aufgaben/04-elementweise-berechnung/04-elementweise-berechnung-t1.qmd
-          cp loesungen/04-elementweise-berechnung-geruest.ipynb _output/aufgaben/04-elementweise-berechnung/04-elementweise-berechnung-t1.ipynb
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_output'
 
-          
   deploy:
     needs: render
     environment:

@@ -1,7 +1,16 @@
 ---
 title: Aufgabenblatt 4
 subtitle: Elementweise Berechnung
+engine: julia
 ---
+
+```{julia}
+#| echo: false
+#| message: false
+using MMJMesh
+using MMJMesh.Meshes
+using IntervalSets
+```
 
 ## Assemblierung des linearen Gleichungssystems
 
@@ -29,15 +38,20 @@ Nach welchem Schema können eine Feder und eine Einzellast im linearen Gleichung
 
 ## Programmierung
 
-Laden Sie das Grundgerüst für die Programmierung zu diesem Paket als [Jupyter-Notebook](04-elementweise-berechnung-t1.ipynb)  oder [Quarto-Datei](04-elementweise-berechnung-t1.qmd) herunter.
-
 ### Vorbereitung
 
 Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
+1. FE-Netz
+
+    ```{julia}
+    m = Mesh(0 .. 20, 25)
+    mplot(m) |> mconf()
+    ```
+
 1. Parametrisierte Funktion
 
-    ```{.julia}
+    ```{julia}
     function bsin(b)
         function f(x)
             return b * sin(x)
@@ -53,18 +67,32 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Ein Element des FE-Netzes
 
-    ```{.julia}
-    m = Mesh(0 .. 20, 400)
-    e2 = element(m, 2)
-    println(e2)
-    println(length(e2))
+    ```{julia}
+    e22 = element(m, 22)
+    println(e22)
+    println(length(e22))
     ```
 
 ### Berechnung für ein Element
 
 Implementieren Sie die Funktionen `pile_ke(EA, C)`, `pile_re(n)` für die Elementmatrix und den Elementlastvektor.
 
-Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pile_ke(e)` und `pile_re(e)` jeweils eine Funktion zurück, die für eine Element `e` die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier bitte ein bisschen Geduld haben, das wird sich klären.
+Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pile_ke(e)` und `pile_re(e)` jeweils eine Funktion zurück, die für eine Element `e` die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier haben Sie bitte ein bisschen Geduld, das wird sich klären.
+
+Hier das Grundgerüst für den Elementlastvektor:
+
+```{julia}
+function pile_re(n)
+    function refunc(e)
+        return 3 * nodeindices(e)
+    end
+    return refunc
+end
+
+m = Mesh(0 .. 20, 400)
+refunc = pile_re(77)
+refunc(element(m, 27))
+```
 
 ### Vorbereitung
 
@@ -72,7 +100,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Funktion mit zwei Rückgabewerten
 
-    ```{.julia}
+    ```{julia}
     function test(x)
         return x, x^2
     end
@@ -83,7 +111,8 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Addition einer Untermatrix mit Indexvektor:
 
-    ```{.julia}
+    ```{julia}
+    I = [4, 1]
     K = reshape(collect(1:16), 4, 4)
     Ke = [100 200; 300 400]  
 
@@ -91,15 +120,14 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
     display(Ke)
     display(K[I, I])
 
-    I = [4, 1]
     K[I, I] += Ke
 
     display(K)
     ```
 
-    Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten:
+    Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten (Block mit Code kopieren):
 
-    ```{.julia}
+    ```{julia}
     K = reshape(collect(1:16), 4, 4)
     Ke = [100 200; 300 400]  
     Ae = [0 0 0 0; 0 0 0 0]
@@ -112,16 +140,17 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Schleife über Elemente
 
-    ```{.julia}
-    m = Mesh(0 .. 20, 4)
+    ```{julia}
+    m = Mesh(p.Ω, 4)
     for e = elements(m)
-        printl(e)
+        println(e)
+        println(nodeindices(e))
     end
     ```
 
 1. Funktion mit Elementen assoziieren
 
-    ```{.julia}
+    ```{julia}
     m = Mesh(0 .. 20, 4)
     e3 = element(m, 3)
     m.data[:test, :elements] = sqrt
@@ -135,7 +164,9 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 ### Lineares Gleichungssystem
 
-Erstellen und testen Sie die Funktion `assemble_kr(m)`, die für ein Netz `m` die globale Steifigkeitsmatrix $\mathbf{K}$ und den globalen Lastvektor $\mathbf{r}$ zurück gibt. Feder und Einzellast sollen an dieser Stelle noch nicht berücksichtigt werden.
+Erstellen und testen Sie die Funktion `assemble_kr(m)`, die für ein Netz `m` die globale Steifigkeitsmatrix $\mathbf{K}$ und den globalen Lastvektor $\mathbf{r}$ zurück gibt. 
+
+Feder und Einzellast bleiben im Moment unberücksichtigt.
 
 ### Organisation
 
@@ -144,3 +175,5 @@ Verschieben Sie die Funktionen für den Bohrpfahl in eine Datei `pile.jl` und di
 ### Berechnung
 
 Kopieren Sie ihr Notebook für das vorherige Aufgabenblatt und ändern Sie die Funktion `pile_fem` dahingehend, dass die Berechnung von $\hat{\mathbf{u}}$ mithilfe der Funktionen aus diesem Aufgabenblatt erfolgt. An dieser Stelle müssen Sie Federsteifigkeit und Einzellast einbauen.
+
+TODO: Wird noch ergänzt
