@@ -28,8 +28,6 @@ jobs:
           version: '1.10.5'
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-      - name: Install Julia Dependencies
-        run: julia install-dependencies.jl
       - name: Quarto render assignments
         run: quarto render aufgaben -t html
       - name: Upload artifact

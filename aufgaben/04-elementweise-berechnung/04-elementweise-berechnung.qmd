@@ -7,6 +7,7 @@ engine: julia
 ```{julia}
 #| echo: false
 #| message: false
+include("install-dependencies.jl")
 using MMJMesh
 using MMJMesh.Meshes
 using IntervalSets
