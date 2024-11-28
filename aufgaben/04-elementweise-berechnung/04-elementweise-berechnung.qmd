@@ -4,15 +4,6 @@ subtitle: Elementweise Berechnung
 engine: julia
 ---
 
-```{julia}
-#| echo: false
-#| message: false
-include("install-dependencies.jl")
-using MMJMesh
-using MMJMesh.Meshes
-using IntervalSets
-```
-
 ## Assemblierung des linearen Gleichungssystems
 
 ### Basisfunktionen und Elementfunktionen
@@ -45,14 +36,14 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. FE-Netz
 
-    ```{julia}
+    ```{.julia}
     m = Mesh(0 .. 20, 25)
     mplot(m) |> mconf()
     ```
 
 1. Parametrisierte Funktion
 
-    ```{julia}
+    ```{.julia}
     function bsin(b)
         function f(x)
             return b * sin(x)
@@ -68,7 +59,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Ein Element des FE-Netzes
 
-    ```{julia}
+    ```{.julia}
     e22 = element(m, 22)
     println(e22)
     println(length(e22))
@@ -82,7 +73,7 @@ Damit die Assemblierung des linearen Gleichungssystems problemunabhängig progra
 
 Hier das Grundgerüst für den Elementlastvektor:
 
-```{julia}
+```{.julia}
 function pile_re(n)
     function refunc(e)
         return 3 * nodeindices(e)
@@ -101,7 +92,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Funktion mit zwei Rückgabewerten
 
-    ```{julia}
+    ```{.julia}
     function test(x)
         return x, x^2
     end
@@ -112,7 +103,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Addition einer Untermatrix mit Indexvektor:
 
-    ```{julia}
+    ```{.julia}
     I = [4, 1]
     K = reshape(collect(1:16), 4, 4)
     Ke = [100 200; 300 400]  
@@ -128,7 +119,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
     Passen Sie die Matrix `Ae` so an, dass Sie für `K` das selbe Ergebnis wie oben erhalten (Block mit Code kopieren):
 
-    ```{julia}
+    ```{.julia}
     K = reshape(collect(1:16), 4, 4)
     Ke = [100 200; 300 400]  
     Ae = [0 0 0 0; 0 0 0 0]
@@ -141,7 +132,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Schleife über Elemente
 
-    ```{julia}
+    ```{.julia}
     m = Mesh(p.Ω, 4)
     for e = elements(m)
         println(e)
@@ -151,7 +142,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 1. Funktion mit Elementen assoziieren
 
-    ```{julia}
+    ```{.julia}
     m = Mesh(0 .. 20, 4)
     e3 = element(m, 3)
     m.data[:test, :elements] = sqrt
