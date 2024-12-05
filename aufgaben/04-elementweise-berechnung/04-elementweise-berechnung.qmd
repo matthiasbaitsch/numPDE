@@ -134,25 +134,29 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
     Wie addieren Sie die Elementsteifigkeitsmatrizen zur globalen Matrix hinzu?
 
-1. Schleife über Elemente
+1. Schleife über Bestandteile des FE-Netzes
 
     ```{.julia}
     m = Mesh(p.Ω, 4)
-    for e = elements(m)
+    for e = entities(m)
         println(e)
         println(nodeindices(e))
     end
     ```
 
-1. Funktion mit Elementen assoziieren
+1. Funktion mit Bestandteilen des FE-Netzes assoziieren
 
     ```{.julia}
     m = Mesh(0 .. 20, 4)
-    e3 = element(m, 3)
-    m.data[:test, :elements] = sqrt
+    
+    setdata!(group(m, :elements), :test, sqrt)
+    setdata!(node(m, 1), :test, exp)
 
-    f = e3.data[:test]
+    f = data(element(m, 3), :test)
     f(4)
+    f = data(node(m, 1), :test)
+    f(1)
+    hasdata(node(m, 2), :test)
     ```
 
     Wie können Sie diese Idee für die Assemblierung des linearen Gleichungssystems nutzen?
