@@ -71,7 +71,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 
 Implementieren Sie die Funktionen `pile_ke(EA, C)`, `pile_re(n)` für die Elementmatrix und den Elementlastvektor.
 
-Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `pile_ke(e)` und `pile_re(e)` jeweils eine Funktion zurück, die für eine Element `e` die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier haben Sie bitte ein bisschen Geduld, das wird sich klären.
+Damit die Assemblierung des linearen Gleichungssystems problemunabhängig programmiert werden kann, geben die Funktionen `kefunc(e)` und `refunc(e)` jeweils eine Funktion zurück, die für eine Element `e` die Elementsteifigkeitsmatrix beziehungsweise den Elementlastvektor berechnet. Hier haben Sie bitte ein bisschen Geduld, das wird sich klären.
 
 Hier das Grundgerüst für den Elementlastvektor:
 
