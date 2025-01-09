@@ -11,3 +11,9 @@ function assemble_kr(m)
     
     return K, r
 end
+
+function apply_dirichlet_bcs!(dofs, K, r)
+    K[dofs, :] .= 0
+    r[dofs] .= 0
+    K[diagind(K)[dofs]] .= 1
+end
