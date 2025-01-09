@@ -137,7 +137,7 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
 1. Schleife über Bestandteile des FE-Netzes
 
     ```{.julia}
-    m = Mesh(p.Ω, 4)
+    m = Mesh(0 .. 20, 4)
     for e = entities(m)
         println(e)
         println(nodeindices(e))
@@ -153,9 +153,9 @@ Erklären Sie sich jeweils, was in den folgenden Codefragmenten passiert.
     setdata!(node(m, 1), :test, exp)
 
     f = data(element(m, 3), :test)
-    f(4)
+    println(f(4))
     f = data(node(m, 1), :test)
-    f(1)
+    println(f(1))
     hasdata(node(m, 2), :test)
     ```
 

@@ -1,0 +1,157 @@
+---
+title: Aufgabenblatt 4
+engine: julia
+---
+
+```{julia}
+# Einmal ausführen
+# using Pkg
+# Pkg.update("MMJMesh")
+
+using IntervalSets
+using MMJMesh.Plots
+using MMJMesh.Meshes
+```
+
+Netz zum Testen
+
+## Berechnung für ein Element
+
+### Vorbereitung
+
+1. Netz
+
+    ```{julia}
+    m = Mesh(0 .. 20, 4)
+    mplot(m) |> mconf()
+    ```
+
+1. Parametrisierte Funktion
+
+    ```{julia}
+    function bsin(b)
+        function f(x)
+            return b * sin(x)
+        end
+        return f
+    end
+
+    f1 = bsin(1)
+    f2 = bsin(5)
+
+    println("f1(π/2) = ", f1(π / 2), ", f2(π/2) = ", f2(π / 2))
+    ```
+
+1. Element eines FE-Netzes
+
+    ```{julia}
+    e2 = element(m, 2)
+    println(e2)
+    println(length(e2))
+    ```
+
+### Umsetzung
+
+```{julia}
+include("pile.jl")
+
+m = Mesh(0 .. 20, 23)
+n4 = node(m, 4)
+e8 = element(m, 8)
+
+f1 = force(18.2)
+re_func = pile_re(1.8)
+ke_func = pile_ke(3.2, 8.9)
+s1 = spring(121.4)
+
+display(f1(n4))
+display(re_func(e8))
+display(ke_func(e8))
+display(s1(n4))
+```
+
+## Lineares Gleichungssystem
+
+### Vorbereitung
+
+1. Funktion mit zwei Rückgabewerten
+
+    ```{julia}
+    function test(x)
+        return x, x^2
+    end
+
+    a, b = test(2)
+    println("a = ", a, ", b = ", b)
+    ```
+
+1. Addition einer Untermatrix
+
+    Indexvektor
+
+    ```{julia}
+    I = [4, 1]
+    K = reshape(collect(1:16), 4, 4)
+    Ke = [100 200; 300 400]  
+
+    display(K)
+    display(Ke)
+    display(K[I, I])
+
+    K[I, I] += Ke
+
+    display(K)
+    ```
+
+    Assemblierungsmatrix
+
+    ```{julia}
+    K = reshape(collect(1:16), 4, 4)
+    Ke = [100 200; 300 400]  
+    Ae = [0 0 0 1; 1 0 0 0]
+    K += Ae' * Ke * Ae
+
+    display(K)
+    ```
+
+1. Schleife über Bestandteile des FE-Netzes
+
+    ```{julia}
+    m = Mesh(0 .. 20, 4)
+    for e = entities(m)
+        println(e)
+        println(nodeindices(e))
+    end
+    ```
+
+1. Funktion mit Bestandteilen des Netzes assoziieren
+
+    ```{julia}
+    m = Mesh(0 .. 20, 4)
+
+    setdata!(group(m, :elements), :test, sqrt)
+    setdata!(node(m, 1), :test, exp)
+
+    f = data(element(m, 3), :test)
+    println(f(4))
+    f = data(node(m, 1), :test)
+    println(f(1))
+    hasdata(node(m, 2), :test)
+    ```
+
+### Umsetzung
+
+```{julia}
+include("fem.jl")
+
+m = Mesh(0 .. 20, 4)
+setdata!(group(m, :elements), :ke_func, pile_ke(8.1, 9.2))
+setdata!(group(m, :elements), :re_func, pile_re(68))
+setdata!(node(m, nnodes(m)), :ke_func, spring(66000))
+setdata!(node(m, 1), :re_func, force(20000))
+
+K, r = assemble_kr(m)
+display(K)
+display(r)
+```
+
