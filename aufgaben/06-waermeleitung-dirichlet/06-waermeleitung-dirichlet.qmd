@@ -1,0 +1,20 @@
+---
+title: Aufgabenblatt 6
+subtitle: Wärmeleitung 2D (Dirichlet Randbedingungen)
+engine: julia
+---
+
+### Dirichlet-Randbedingungen
+
+Implementieren Sie die Funktion `apply_dirichlet_bcs!(dofs, K, r)` mit der das lineare Gleichungssystem so modifiziert wird, dass die Lösungen für die Freiheitsgrade in `dofs` gleich null sind. Verwenden Sie das auf Moodle bereitgestellte Notebook `dirichlet-test.ipynb`.
+
+### Kreisscheibe
+
+1. Erzeugen Sie mit Gmsh ein FE-Netz für ein kreisförmiges Gebiet mit dem Radius $r = 2.2$m. Die Elementgröße soll $h = 0.2$m betragen. Es trägt zur Übersichtlichkeit bei, wenn Sie die Gmsh-Dateien in einen Unterordner `gmsh` legen.
+
+    Zur Kontrolle: Sie sollten rund 500 Knoten und 1000 Elemente erhalten.
+
+1. Berechnen Sie in der Datei \datei{heat\_plate.ipynb} die Näherungslösung der Temperaturverteilung für die Kreisplatte (Parameter $\lambda$ und $w$ frei gewählt). Vergleichen Sie die maximale Temperatur mit der exakten Lösung
+    $$
+    w_{\mathrm{max}} = \frac{w \cdot r^2}{4 \cdot \lambda}.
+    $$

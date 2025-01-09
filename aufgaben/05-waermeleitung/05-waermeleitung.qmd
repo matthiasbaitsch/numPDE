@@ -90,7 +90,7 @@ Bearbeiten Sie folgende Punkte:
     $$
     Um Schreibarbeit zu sparen können Sie den hochgestellten Index $e$ weglassen.
 
-1. Implementieren und testen Sie die Funktion `heat_ke` zur Bereitstellung einer Funktion, mit der die Element-Wärmeleitfähigkeitsmatrix berechnet wird (vergleiche `pile_ke`). Einen entsprechenden Test finden Sie auf Moodle.
+1. Implementieren und testen Sie die Funktion `heat_ke` zur Bereitstellung einer Funktion, mit der die Element-Wärmeleitfähigkeitsmatrix berechnet wird (vergleiche `pile_ke`). Den entsprechenden Test finden Sie auf Moodle.
 
 1. Leiten Sie den Quellvektor $\mathbf{r}^e$ her.
 
