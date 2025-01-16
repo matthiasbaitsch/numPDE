@@ -1,6 +1,6 @@
 ---
 title: Aufgabenblatt 6
-subtitle: Wärmeleitung 2D (Dirichlet Randbedingungen)
+subtitle: Wärmeleitung 2D (Dirichlet-Randbedingungen)
 ---
 
 ### Dirichlet-Randbedingungen
@@ -54,21 +54,4 @@ Berechnen Sie die Temperaturverteilung für das unten dargestellte Wärmeleitung
 
 ![](bilder/multi-lambda.svg)
 
-Hinweise zur Netzgenerierung:
-
-- Mit 
- 
-  `coherence;` 
- 
-  lassen sich mehrer Teilgebiete verbinden
-
-- Gruppen mit Flächen und Kurven erzeugen Sie in der .geo-Datei mit
-
-  `Physical Surface("S1") = {3, 4};`
-
-  `Physical Curve("gammaD") = {11, 12, 13};`
-
-- Die Knoten auf einer Kurve `gammaD` sind in `MMJMesh` in der Gruppe `:gammaD0` abgelegt, es wird also eine 0 angehängt
-
-- Der Eintrag "Reload script" unter "Modules - Geometry" von Gmsh ist sehr praktisch
-
+Für die Generierung des Netzes schauen Sie sich bitte [dieses Beispiel](https://matthiasbaitsch.github.io/mmjmesh/guide/mesh.html#collections-of-entities-groups) an.

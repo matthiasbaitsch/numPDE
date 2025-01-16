@@ -24,3 +24,18 @@ function heat_re(w)
     end
     return refunc
 end
+
+function robin_ke(h)
+    function kefunc(e)
+        return h * length(e) / 6 * [2 1; 1 2]
+    end
+    return kefunc
+end
+
+function robin_re(h, ts)
+    function refunc(e)
+        return h * ts * length(e) / 2 * [1; 1]
+    end
+    return refunc
+end
+

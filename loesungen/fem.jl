@@ -18,4 +18,5 @@ function apply_dirichlet_bcs!(K, r, dofs, v=0)
     K[dofs, :] .= 0
     r[dofs] .= v
     K[diagind(K)[dofs]] .= 1
+    nothing
 end

@@ -1,0 +1,20 @@
+---
+title: Aufgabenblatt 7
+subtitle: Wärmeleitung 2D (Robin-Randbedingungen)
+---
+
+## Programmierung
+
+Implementieren Sie die Funktionen `robin_ke(h)` und `robin_re(h, ts)` zur Berücksichtigung von Robin-Randbedingungen. Dabei ist `h` der Wärmeübergangskoeffizient $h = 1/R$ (mit dem Wärmeübergangswiderstand $R$) und `ts` die vorgegebene Temperatur $\theta^*$. Kontrollieren Sie Ihre Funktionen mithilfe des auf Moodle bereitgestellten Tests.
+
+## Testbeispiel
+
+Überprüfen Sie ihr Programm für unterschiedliche Materialparameter und Robin-Randbedingungen anhand des Rechenbeispiels
+
+![](bilder/beispiel-fischer-2008.png){width="70%" fig-align="center"}
+
+aus Fischer et al. (2008): Lehrbuch der Bauphysik.
+
+## Praxisbeispiel
+
+Berechnen Sie die Temperaturverteilung für eine praxisnahe Wärmebrücke.
