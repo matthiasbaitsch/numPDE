@@ -55,13 +55,13 @@ $$
   \left(
     -\mathbf{K}\boldsymbol{\theta} 
     + 
-    \mathbf{r}^\mathrm{i} 
+    \mathbf{r}_\mathrm{i} 
     +
-    (1 + \sin(\omega t)) \cdot \mathbf{r}^\mathrm{a}
+    (1 + \sin(\omega t)) \cdot \mathbf{r}_\mathrm{a}
   \right)
 $$
 
-wobei $\mathbf{r}^\mathrm{i}$ und $\mathbf{r}^\mathrm{a}$ die rechten Seiten zum inneren bzw. äußeren Rand sind.
+wobei $\mathbf{r}_\mathrm{i}$ und $\mathbf{r}_\mathrm{a}$ die rechten Seiten zum inneren bzw. äußeren Rand sind.
 
 Tipps: 
 
