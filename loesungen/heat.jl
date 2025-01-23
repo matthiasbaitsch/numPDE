@@ -14,6 +14,14 @@ function heat_ke(λ)
     return kefunc
 end
 
+function heat_me(ρ, c)
+    function mefunc(e)
+        A = area(e)
+        return A * ρ * c / 12 * [2 1 1; 1 2 1; 1 1 2]
+    end
+    return mefunc
+end
+
 function heat_re(w)
     function refunc(e)
         x = coordinates(e)

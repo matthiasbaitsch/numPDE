@@ -1,0 +1,73 @@
+---
+title: Aufgabenblatt 8
+subtitle: Wärmeleitung 2D instationär
+---
+
+## Herleitung der Element-Speichermatrix
+
+1. Skizzieren Sie die Graphen der Funktionen $\hat{N}_i, \; i = 1, 2, 3$ über dem Einheitsdreieck $\hat\Omega$
+
+1. Stellen Sie die Element-Speichermatrix $\mathbf{M}^e$ auf
+
+## Programmierung
+
+### Element-Speichermatrix
+
+Implementieren Sie die Funktion `heat_me` analog zu `heat_ke`. 
+
+### Globale Speichermatrix 
+
+Erstellen Sie die Funktion `assemble_kmr` mit der die globalen Matrizen $\mathbf{K}$ und $\mathbf{M}$ sowie der Vektor $\mathbf{r}$ zusammengebaut werden.
+
+### Verifikation
+
+Verifizieren Sie Ihren Code mit dem auf Moodle bereitgestellten Testproblem in `08-verifikation.ipynb`.
+
+## Anwendungsbeispiele
+
+### Thermischer Ausgleich
+
+Simulieren Sie für die unten dargestellte Situation den Temperaturverlauf über eine Stunde. Über den Rand findet keine Wärmeübertragung statt.
+
+![](bilder/te.svg)
+
+Tipp: Die Knotennummern für die beiden Teilgebiete erhalten Sie mit
+
+```{.julia}
+nl = [i for i = nodeindices(m) if coordinate(node(m, i), 1) < 0.1]
+nr = [i for i = nodeindices(m) if coordinate(node(m, i), 1) > 0.1]
+```
+
+Eine bessere Lösung ist in Arbeit.
+
+### Raumecke mit wechselnder Außentemperatur
+
+Simulieren Sie für die dargestellte Situation die Temperaturverteilung über einen Zeitraum von 48 Stunden. Verwenden Sie dabei die stationäre Lösung für $t=0$ als Anfangstemperaturverteilung.
+
+![](bilder/corner.svg)
+
+Die Funktion der DGL lautet für dieses Beispiel
+
+$$
+  \mathbf{F}(t, \boldsymbol{\theta})
+  =
+  \mathbf{M}^{-1}
+  \left(
+    -\mathbf{K}\boldsymbol{\theta} 
+    + 
+    \mathbf{r}^\mathrm{i} 
+    +
+    (1 + \sin(\omega t)) \cdot \mathbf{r}^\mathrm{a}
+  \right)
+$$
+
+wobei $\mathbf{r}^\mathrm{i}$ und $\mathbf{r}^\mathrm{a}$ die rechten Seiten zum inneren bzw. äußeren Rand sind.
+
+Tipps: 
+
+- In Julia lässt sich das Anfangswertproblem auch ohne die Inverse der Massenmatrix lösen
+
+- Verwenden Sie die auf Moodle bereitgestellten Dateien als Ausgangspunkt
+
+
+
