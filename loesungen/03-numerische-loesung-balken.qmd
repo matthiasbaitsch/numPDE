@@ -1,0 +1,56 @@
+---
+title: 'Aufgabenblatt 3: Numerische Lösung'
+engine: julia
+---
+
+```{julia}
+using Unitful
+using CairoMakie
+using LinearAlgebra
+
+using MMJMesh.Plots
+using MMJMesh.Mathematics
+
+si(x, u) = ustrip(upreferred(x * uparse(u)))
+```
+
+## Beispiel Aufgabenblatt 1, Aufgabe 3
+
+```{julia}
+fromunit(a) = ustrip(upreferred(a))
+
+EI = si(210000, "N/mm^2") * si(8356, "cm^3")
+l = si(8, "m")
+q = si(50, "kN/m")
+k = si(500, "kN/mm")
+
+a(w, δw) = EI * integrate(w'' * δw'', 0 .. l) + k * (w(0) * δw(0) + w(l) * δw(l))
+b(δw) = q * integrate(δw, 0 .. l)
+
+phis = hermitefunctions(range(0, l, length=2), midnode=true)
+
+K = [a(phii, phij) for phii = phis, phij = phis]
+r = [b(phii) for phii = phis]
+
+what = K \ r
+
+w = what ⋅ phis
+M = -EI * w'' / 1000
+V = M'
+```
+
+```{julia}
+println(1000 * V(0) ≈ q * l / 2)
+println(1000 * V(l) ≈ -q * l / 2)
+println(abs(M(0)) < 1e-10)
+println(abs(M(l)) < 1e-10)
+println(1000 * M(l / 2) ≈ q * l^2 / 8)
+```
+
+```{julia}
+fig = Figure()
+fplot!(Axis(fig[1, 1], title="Displacement"), 1000 * w, zero(wh), npoints=10)
+fplot!(Axis(fig[2, 1], title="Bending moment and shear force"), M, V, zero(wh), npoints=10)
+fig
+```
+

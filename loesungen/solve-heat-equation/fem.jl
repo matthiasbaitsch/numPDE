@@ -1,3 +1,13 @@
+using MMJMesh
+using MMJMesh.Plots
+using MMJMesh.Meshes
+using MMJMesh.Utilities
+using MMJMesh.Geometries
+using MMJMesh.Mathematics
+
+using SparseArrays
+using LinearAlgebra
+
 function assemble_kr(m)
     N = nnodes(m)
     K = zeros(N, N)

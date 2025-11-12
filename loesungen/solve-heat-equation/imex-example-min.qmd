@@ -1,0 +1,178 @@
+---
+title: Solving the heat equation with diffusion-implicit time-stepping using finite elements
+engine: julia
+execute:
+  daemon: false
+---
+
+Solve the heat equation
+
+$$
+    \rho c \dot T(x, t) = \lambda T''(x, t) + \rho c \beta \sin(\gamma x)
+$$
+
+with boundary conditions $T'(a, t) = \nabla T_l$ and $T(b, t) = T_r$ for the initial state $T(x, 0) = 1.0$ using the finite element method. The example is taken from the [SCIML documentation](https://docs.sciml.ai/DiffEqDocs/latest/examples/diffusion_implicit_heat_equation/).
+
+## Packages
+
+```{julia}
+#| include: false
+using SparseArrays
+using LinearAlgebra
+using BenchmarkTools
+using DifferentialEquations
+using CairoMakie: Axis, Figure, axislegend, scatterlines!, spy!
+include("fem.jl")
+include("heat.jl")
+```
+
+## Problem parameters
+
+```{julia}
+a, b, n, m = 0.0, 1.0, 10, 20;           # Domain and number of elements
+λ, ρ, c = 100, 1, 1;                     # Material parameters
+∇Tₗ = 10;                                # Derivative of temperature to the left
+Tᵣ = 1;                                  # Temperature to the right
+β, γ = 10000, π;                         # Parameters for heat source
+Nₜ = 10;                                 # Number of time steps
+Δt = 1000.0;                             # Time step size
+```
+
+## Heat source and analytic solution
+
+Function of heat source and analytic solution for $t \to \infty$ from $0 = \lambda T''(x, t) + \rho c \beta \sin(\gamma x)$.
+
+```{julia}
+x = parameter(a .. b)
+S = ρ * c * β * sin(γ * x)
+Tₑₓ = -ρ * c / λ * antiderivative(S, 2)  # A solution
+Tₑₓ += (∇Tₗ - Tₑₓ'(a)) * x               # Neumann BC to the left
+Tₑₓ += Tᵣ - Tₑₓ(b);                      # Dirichlet BC to the right
+```
+
+Plot functions
+
+```{julia}
+f = Figure()
+Axis(f[1, 1], title="Heat source")
+plot!(S)
+Axis(f[1, 2], title="Analytic solution")
+plot!(Tₑₓ)
+f
+```
+
+## Finite element part
+
+Define mesh
+
+```{julia}
+mesh = Mesh((a .. b) × (0 .. m / n * (b - a)), n, m, TRIANGLE)
+g_el = group(mesh, :elements)
+g_bl = definegroup!(:bl, edges(mesh, on(VLine(a))))
+g_br = definegroup!(:br, edges(mesh, on(VLine(b))))
+plot(mesh, edgesvisible=true)
+```
+
+Set functions to compute element vectors and matrices using a penalty parameter to enforce the Dirichlet BC to the right. Assemble heat diffusion and storage matrices and source vector.
+
+```{julia}
+pen = 1e5
+setdata!(g_el, :ke_func, heat_ke(λ))
+setdata!(g_el, :me_func, heat_me(ρ, c))
+setdata!(g_el, :re_func, heat_re(e -> S(center(geometry(e))[1])))
+setdata!(g_br, :ke_func, robin_ke(pen))
+setdata!(g_br, :re_func, robin_re(pen, Tᵣ))
+setdata!(g_bl, :re_func, heat_re(-λ * ∇Tₗ))
+K, M, r = assemble_kmr(mesh);
+```
+
+Plot matrices
+
+```{julia}
+using CairoMakie: hidedecorations!
+
+fig = Figure()
+ax = Axis(fig[1, 1], yreversed=true, title="Stiffness matrix", aspect=1)
+hidedecorations!(ax)
+spy!(0 .. 1, 0 .. 1, K)
+ax = Axis(fig[1, 2], yreversed=true, title="Mass matrix", aspect=1)
+hidedecorations!(ax)
+spy!(0 .. 1, 0 .. 1, M)
+fig
+```
+
+## Define and solve initial value problem
+
+Solve the resulting initial value problem 
+
+$$
+    \mathbf{M} \dot{\mathbf{T}}(t) = -\mathbf{K}\mathbf{T}(t) + \mathbf{r}(t)
+$$
+
+Time span and initial value
+
+```{julia}
+tspan = [0, Nₜ * Δt]
+T₀ = Tᵣ * ones(nnodes(mesh));
+```
+
+Multiply equation by inverse of mass matrix and define split ODE problem.
+
+```{julia}
+luM = lu(M)
+iMK = luM \ Matrix(K)
+iMr = luM \ r
+
+sf1 = DiffEqArrayOperator(-iMK)
+sf2(dT, _, _, _) = (dT .= iMr)
+p1 = SplitODEProblem(sf1, sf2, T₀, tspan)
+
+@btime solve(p1, KenCarp47(), dt=Δt)
+s1 = solve(p1, KenCarp47(), dt=Δt);
+```
+
+
+```{julia}
+sf1 = DiffEqArrayOperator(-K)
+sf2(dT, _, _, _) = (dT .= r)
+pf = SplitFunction(sf1, sf2, mass_matrix=M)
+p1 = SplitODEProblem(pf, T₀, tspan)
+
+# @btime solve(p1, KenCarp47(), dt=Δt)
+s1 = solve(p1, KenCarp47(), dt=Δt);
+```
+
+## Results
+
+```{julia}
+n_fe = nodeindices(mesh, on(HLine(0)))
+T_fe = s1[end][n_fe]
+x_fe = coordinates(mesh, n_fe, 1)
+
+f = Figure()
+ax = Axis(f[1, 1])
+p1 = plot!(Tₑₓ)
+p2 = scatterlines!(x_fe, T_fe, color=:red)
+axislegend(ax, [p1, p2], ["analytic", "numerical"])
+ax = Axis(f[1, 2])
+p3 = scatterlines!(x_fe, T_fe - Tₑₓ.(x_fe))
+axislegend(ax, [p3], ["error"])
+f
+```
+
+## Compare to fully implicit scheme
+
+```{julia}
+F(T, _, _) = -K * T + r
+JF(_, _, _) = -K
+f3 = ODEFunction(F, jac=JF, mass_matrix=M)
+p2 = ODEProblem(f3, T₀, tspan)
+@btime solve(p2, QNDF())
+s2 = solve(p2, QNDF());
+```
+
+Solutions are close:
+
+```{julia}
+norm(s2[end] - s1[end]) / norm(s1[end])
+```

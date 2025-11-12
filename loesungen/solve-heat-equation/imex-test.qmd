@@ -1,0 +1,111 @@
+---
+title: Test Split-ODE Solvers
+---
+
+See 
+- https://docs.sciml.ai/DiffEqDocs/latest/solvers/split_ode_solve/
+- https://docs.sciml.ai/DiffEqDocs/latest/tutorials/advanced_ode_example/
+- https://docs.sciml.ai/DiffEqDocs/latest/examples/diffusion_implicit_heat_equation/
+
+
+```{julia}
+using CairoMakie
+using LinearAlgebra
+using DifferentialEquations
+```
+
+```{julia}
+function mplot(sol, yex=nothing)
+    t = sol.t
+    y = stack(sol.u, dims=1)
+    if !isnothing(yex)
+        p = lines(t[1] .. t[end], yex, color=:tomato)
+    else
+        p = Figure()
+        Axis(p[1,1])
+    end
+    for i = 1:size(y, 2)
+        scatterlines!(t, y[:, i])
+    end
+    p
+end
+```
+
+## Exponential decay
+
+Solve $y'(x) = -y(x)$
+
+```{julia}
+f1! = DiffEqArrayOperator([-1.0;;])
+f2!(dy, _, _, _) = (dy .= 0)
+p = SplitODEProblem(f1!, f2!, [1.0], [0.0, 20.0], dt=2)
+@time sol = solve(p, IMEXEuler());
+mplot(sol, x -> exp(-x))
+```
+
+## Test problem from Tübingen lecture notes
+
+Solve $y′(x) = −50(y(x) − \cos x), \; y(0) = 0$
+
+Exact solution
+
+```{julia}
+ye(x) = ((50 * exp(-50x) * (-50 + 50 * exp(50x) * cos(x) + exp(50x) * sin(x))) / 2501)
+```
+
+Euler
+
+```{julia}
+f1! = DiffEqArrayOperator([-50.0;;])
+f2!(dy, _, _, t) = (dy[1] = 50 * cos(t))
+p = SplitODEProblem(f1!, f2!, [0.0], [0.0, 1.5], dt=0.05)
+@time sol = solve(p, IMEXEuler());
+mplot(sol, ye)
+```
+
+Higher-order method
+
+```{julia}
+f1! = DiffEqArrayOperator([-50.0;;])
+f2!(dy, _, _, t) = (dy[1] = 50 * cos(t))
+p = SplitODEProblem(f1!, f2!, [0.0], [0.0, 1.5])
+@time sol = solve(p, KenCarp4());
+mplot(sol, ye)
+```
+
+## Thermal equlibrium with two bodies
+
+```{julia}
+M = [3000.0 0.0; 0.0 3000.0];
+K = [1.0 -1.0; -1.0 1.0];
+```
+
+Euler
+
+```{julia}
+f1! = DiffEqArrayOperator(-inv(M) * K)
+f2!(dy, _, _, _) = (dy .= 0.0005)
+p = SplitODEProblem(f1!, f2!, [10.0, 0.0], [0.0, 10000.0], dt=200.0)
+@time sol = solve(p, IMEXEuler());
+mplot(sol)
+```
+
+Norsett Euler
+
+```{julia}
+f1! = DiffEqArrayOperator(-inv(M) * K)
+f2!(dy, _, _, _) = (dy .= 0.0005)
+p = SplitODEProblem(f1!, f2!, [10.0, 0.0], [0.0, 10000.0], dt=200.0)
+@time sol = solve(p, ETD1());
+mplot(sol)
+```
+
+Adaptive
+
+```{julia}
+f1! = DiffEqArrayOperator(-inv(M) * K)
+f2!(dy, _, _, _) = (dy .= 0.0005)
+p = SplitODEProblem(f1!, f2!, [10.0, 0.0], [0.0, 10000.0])
+@time sol = solve(p, KenCarp4());
+mplot(sol)
+```

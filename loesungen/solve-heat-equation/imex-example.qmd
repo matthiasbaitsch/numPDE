@@ -1,0 +1,173 @@
+---
+title: IMEX Verification Example
+engine: julia
+---
+
+https://docs.sciml.ai/DiffEqDocs/latest/examples/diffusion_implicit_heat_equation/
+
+```{julia}
+using MMJMesh
+using MMJMesh.Plots
+using MMJMesh.Meshes
+using MMJMesh.Utilities
+using MMJMesh.Geometries
+using MMJMesh.Mathematics
+
+using Symbolics
+using IntervalSets
+using DomainSets: ×
+using CairoMakie: lines, scatter
+using DifferentialEquations
+
+import CairoMakie
+
+function splot(sol)
+    t = sol.t
+    y = stack(sol.u, dims=1)
+    p = CairoMakie.Figure()
+    CairoMakie.Axis(p[1, 1])
+    for i = 1:size(y, 2)
+        CairoMakie.lines!(t, y[:, i])
+    end
+    p
+end
+
+include("fem.jl")
+include("heat-2.jl")
+```
+
+Solve 
+
+$$
+    \rho c \dot T(x, t) = \lambda T''(x, t) + \rho c \beta \sin(\gamma x)
+$$
+
+s.t. $q(a, t) = - \nabla T_l \lambda$ and $T(b, t) = T_r$ for the initial condition $T(x, 0) = 1.0$.
+
+Parameters
+
+```{julia}
+a, b, n, m = 0.0, 1.0, 10, 5;
+λ, ρ, c = 100, 1, 1;
+α = λ / (ρ * c);
+∇Tₗ = 10;
+Tᵣ = 1;
+β, γ = 10000, π;
+```
+
+Function of heat source
+
+```{julia}
+x = parameter(a .. b)
+S = ρ * c * β * sin(γ * x)
+fplot(S)
+```
+
+Analytical steady state solution
+
+```{julia}
+Tₑₓ = -ρ * c / λ * antiderivative(S, 2)
+Tₑₓ += (∇Tₗ - Tₑₓ'(a)) * x
+Tₑₓ += Tᵣ - Tₑₓ(b)
+fplot(Tₑₓ)
+```
+
+Mesh
+
+```{julia}
+mesh = Mesh((a .. b) × (0 .. m * (b - a) / n), n, m, TRIANGLE)
+bl = definegroup!(mesh, 1, :bl, edgeindices(mesh, on(VLine(a))))
+br = definegroup!(mesh, 1, :br, edgeindices(mesh, on(VLine(b))))
+br0 = definegroup!(mesh, 0, :br0, nodeindices(mesh, on(VLine(b))))
+mplot(mesh, edgesvisible=true) |> mconf()
+```
+
+FE steady state solution
+
+```{julia}
+setdata!(group(mesh, :elements), :ke_func, heat_ke(λ))
+setdata!(group(mesh, :elements), :re_func, heat_re(e -> S(center(geometry(e))[1])))
+setdata!(group(mesh, :bl), :re_func, heat_re(-λ * ∇Tₗ))
+
+K, r = assemble_kr(mesh)
+apply_dirichlet_bcs!(K, r, br0, 1)
+T = K \ r
+```
+
+```{julia}
+mplot(mesh, T, edgesvisible=true) |> mconf()
+```
+
+```{julia}
+idxs = nodeindices(mesh, on(HLine(0)))
+x = coordinates(mesh, idxs)[1, :]
+p = lines(x, T[idxs])
+fplot!(Tₑₓ)
+p
+```
+
+```{julia}
+TFE = T[idxs]
+TEX = Tₑₓ.(x)
+lines(x, 100 * abs.((TEX - TFE) ./ TEX))
+```
+
+FE transient solution
+
+```{julia}
+pen = 1e5
+setdata!(group(mesh, :elements), :me_func, heat_me(ρ, c))
+setdata!(br, :ke_func, robin_ke(pen))
+setdata!(br, :re_func, robin_re(pen, Tᵣ))
+K, M, r = assemble_kmr(mesh)
+
+T₀ = Tᵣ * ones(nnodes(mesh))
+```
+
+```{julia}
+F(T, _, _) = -K * T + r
+JF(_, _, _) = -K
+FM = ODEFunction(F, mass_matrix=M, jac=JF);
+p = ODEProblem(FM, T₀, [0.0, 0.05])
+@time s1 = solve(p, QNDF())
+splot(s1)
+```
+
+```{julia}
+p = lines(x, s1[end][idxs])
+fplot!(Tₑₓ)
+p
+```
+
+IMEX
+
+
+```{julia}
+luM = lu(M)
+iMK = luM \ K
+iMr = luM \ r
+
+Nₜ = 10
+Δt = 1000.0
+
+f1 = DiffEqArrayOperator(-iMK)
+f2(dT, _, _, _) = (dT .= iMr)
+p2 = SplitODEProblem(f1, f2, T₀, [0, Nₜ * Δt])
+@time s2 = solve(p2, IMEXEuler(), dt=Δt)
+```
+
+```{julia}
+using CairoMakie: Figure, Axis, Legend, scatterlines!, axislegend
+
+TFE = s2[end][idxs]
+
+f = Figure()
+ax = Axis(f[1, 1])
+p1 = fplot!(Tₑₓ, linecolor=:red, npoints=50)
+p2 = scatterlines!(x, TFE, color=:red,)
+axislegend(ax, [p1, p2], ["analytic", "numerical"])
+ax = Axis(f[1, 2])
+p3 = scatterlines!(TFE - Tₑₓ.(x))
+axislegend(ax, [p3], ["error"])
+f
+```
