@@ -1,5 +1,11 @@
 _output
+*_files
 .quarto
+*.quarto_ipynb
 attic
-
+studienarbeit
+work
+videos
 /.quarto/
+*.zip
+.vscode
