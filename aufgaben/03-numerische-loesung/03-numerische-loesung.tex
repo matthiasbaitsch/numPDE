@@ -1,0 +1,451 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  ngerman,
+  letterpaper,
+  DIV=11]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{2}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage[german]{selnolig} % disable illegal ligatures
+\fi
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Inhaltsverzeichnis}
+\else
+  \newcommand\contentsname{Inhaltsverzeichnis}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{Abbildungsverzeichnis}
+\else
+  \newcommand\listfigurename{Abbildungsverzeichnis}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{Tabellenverzeichnis}
+\else
+  \newcommand\listtablename{Tabellenverzeichnis}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Abbildung}
+\else
+  \newcommand\figurename{Abbildung}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Tabelle}
+\else
+  \newcommand\tablename{Tabelle}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{Listingverzeichnis}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Aufgabenblatt 3},
+  pdflang={de},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Aufgabenblatt 3}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Numerische Lösung}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+
+\newcommand{\SI}[2]{#1\,#2}
+\newcommand{\si}[1]{#1}
+\newcommand{\num}[1]{#1}
+\newcommand{\newton}{\mathrm{N}}
+\newcommand{\metre}{\mathrm{m}}
+\newcommand{\per}{/}
+\newcommand{\squared}{^2}
+\newcommand{\kilo}{\mathrm{k}}
+\newcommand{\gram}{\mathrm{g}}
+\newcommand{\second}{\mathrm{s}}
+\newcommand{\tothe}[1]{^#1}
+
+Wir lösen das Bohrpfahlproblem mit der Finite-Elemente-Methode für die
+folgenden Systemparameter:
+
+\[
+    \begin{split}
+      E & = 35 \cdot 10^9\,\mathrm{N}/\mathrm{m}^2
+      &
+      d & = 0.8\,\mathrm{m}
+      &
+      l & = 20\,\mathrm{m}
+      \\[0.5em]
+      F & = 2 \cdot 10^6\,\mathrm{N}
+      &
+      \rho & = 2500\,\mathrm{k}\mathrm{g}/\mathrm{m}^3\qquad
+      &
+      g & = 9.81\,\mathrm{m}/\mathrm{s}^2
+      \\[0.5em]
+      C & = 1.75 \cdot 10^7 \, \pi \, d \, \mathrm{N}/\mathrm{m}^2\qquad
+      &
+      S & = 120 \cdot 10^6\,\mathrm{N}/\mathrm{m}
+    \end{split}
+\]
+
+\section{Notebook einrichten}\label{notebook-einrichten}
+
+Legen Sie ein Jupyter-Notebook für dieses Paket an und laden sie die
+folgenden Bibliotheken.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{using} \BuiltInTok{DotMaps}
+\ImportTok{using} \BuiltInTok{CairoMakie}
+\ImportTok{using} \BuiltInTok{MMJMesh.Plots}
+\ImportTok{using} \BuiltInTok{MMJMesh.Mathematics}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Problemparameter}\label{problemparameter}
+
+Für die Programmierung bietet es sich an, die Systemparameter in einem
+Struct zu speichern. Das geht so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p }\OperatorTok{=} \FunctionTok{DotMap}\NormalTok{()}
+
+\CommentTok{\# Basiswerte}
+\NormalTok{p.E }\OperatorTok{=} \FloatTok{35e9}
+\NormalTok{p.F }\OperatorTok{=} \FloatTok{2e6}
+\OperatorTok{...}
+
+\CommentTok{\# Abgeleitete Werte}
+\NormalTok{p.EA }\OperatorTok{=} 
+\OperatorTok{...}
+\NormalTok{p.Ω }\OperatorTok{=} \FloatTok{0} \OperatorTok{..}\NormalTok{ p.l}
+\end{Highlighting}
+\end{Shaded}
+
+Unter einem Struct kann man sich eine Mehrfachvariable vorstellen, die
+unter einem übergeordnetem Namen mehrere Werte speichert. Auf die Werte
+in dem Struct kann dann mit dem Punkt zugegriffen werden, so ist zum
+Beispiel \texttt{p.E} der E-Modul.
+
+\section{Exakte Lösung}\label{exakte-luxf6sung}
+
+Für den Bohrpfahl lässt sich die Lösungsfunktion analytisch bestimmen,
+zum Beispiel mithilfe des Computeralgebrasystems Mathematica. Für die
+Parameter oben lautet die Verschiebungsfunktion
+
+\[
+\begin{multlined}
+  u(x) 
+  = 
+  \frac
+  {\exp(-x/20)}
+  {3500000 \cdot \pi \cdot  \left(a_1 \cdot e^2 - a_2\right)}
+  \cdot
+  \bigg(
+    25000 \cdot \big(a_1 \cdot e^2 + a_2 \cdot \exp(x / 10)\big)
+    \\[1em]
+    - 2943 \cdot \pi \cdot e \cdot \big(\exp(x / 10) + 1\big)
+    \\[1em]
+    + 981 \cdot \pi \cdot \exp(x / 20) \cdot \big(a_1 \cdot e^2 - a_2\big)
+  \bigg).
+\end{multlined}
+\]
+
+wobei \(a_1 = 3 + 7 \pi\) und \(a_2 = 7\pi - 3\) gelten soll. Die
+Eulersche Zahl \(e\) geben Sie mit \texttt{\textbackslash{}euler\ Tab}
+ein.
+
+Geben Sie die exakte Lösung in ihr Notebook ein. Sie können den
+folgenden Code als Ausgangspunkt verwenden:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a1 }\OperatorTok{=} \FloatTok{99}
+\NormalTok{a2 }\OperatorTok{=} \FloatTok{99}
+\NormalTok{x }\OperatorTok{=} \FunctionTok{parameter}\NormalTok{(p.Ω)}
+
+\NormalTok{u }\OperatorTok{=} \FunctionTok{exp}\NormalTok{(x }\OperatorTok{/} \FloatTok{20}\NormalTok{) }\OperatorTok{+} \FunctionTok{exp}\NormalTok{(}\OperatorTok{{-}}\NormalTok{x }\OperatorTok{/} \FloatTok{10}\NormalTok{)}
+
+\FunctionTok{fplot}\NormalTok{(u, npoints}\OperatorTok{=}\FloatTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plotten Sie zusätzlich die Normalkraft \(N = EA \cdot u'\).
+
+\section{Kontrolle starke Form}\label{kontrolle-starke-form}
+
+Kontrollieren Sie, ob die Funktion \(u\) wirklich das Randwertproblem
+löst. Plotten Sie hierzu das Residuum \(EA u'' - C u + n\) und
+überprüfen Sie, ob die Randbedingungen erfüllt sind.
+
+\section{Schwache Form und Kontrolle}\label{schwache-form-und-kontrolle}
+
+Geben Sie die Bilinear- und Linearform der schwachen Formulierung des
+Problems ein. Hier eine Idee, wie das funktioniert:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{a}\NormalTok{(u, δu) }\OperatorTok{=} \FunctionTok{integrate}\NormalTok{(u}\OperatorTok{\textquotesingle{}} \OperatorTok{*}\NormalTok{ δu}\OperatorTok{\textquotesingle{}}\NormalTok{, p.Ω)}
+\end{Highlighting}
+\end{Shaded}
+
+Überprüfen Sie für die Funktionen
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x }\OperatorTok{=} \FunctionTok{parameter}\NormalTok{(p.Ω)}
+\NormalTok{δu1 }\OperatorTok{=} \FunctionTok{sin}\NormalTok{(x)}
+\NormalTok{δu2 }\OperatorTok{=}\NormalTok{ x}
+\NormalTok{δu3 }\OperatorTok{=} \FunctionTok{Polynomial}\NormalTok{([}\FloatTok{0}\NormalTok{, }\FloatTok{0}\NormalTok{, }\FloatTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+ob die Gleichung der Schwachen Form erfüllt ist. Es bietet sich an,
+hierzu die prozentuale Abweichung
+
+\[
+  100 \cdot \frac{|a(u, \delta u) - b(\delta u)|}{|a(u, \delta u)|}
+\]
+
+zu betrachten.
+
+\section{Numerische Lösung}\label{numerische-luxf6sung}
+
+Erstellen Sie eine Funktion \texttt{pile\_fem(p,\ k)}, die für gegebene
+Problemparameter \texttt{p} und eine Anzahl von Elementen \texttt{k} die
+Näherungslösung \(u_h\) berechnet. Verwenden Sie den folgenden Code als
+Ausgangspunkt:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{function} \FunctionTok{pile\_fem}\NormalTok{(p, k)}
+\NormalTok{    phis }\OperatorTok{=} \FunctionTok{hatfunctions}\NormalTok{(}\FunctionTok{range}\NormalTok{(p.Ω, k }\OperatorTok{+} \FloatTok{1}\NormalTok{))}
+    \CommentTok{\# Hier die Berechnung}
+\NormalTok{    uHat }\OperatorTok{=} \FunctionTok{rand}\NormalTok{(k }\OperatorTok{+} \FloatTok{1}\NormalTok{)}
+    \ControlFlowTok{return} \FunctionTok{sum}\NormalTok{(uHat }\OperatorTok{.*}\NormalTok{ phis)}
+\KeywordTok{end}
+
+\NormalTok{uh }\OperatorTok{=} \FunctionTok{pile\_fem}\NormalTok{(p, }\FloatTok{3}\NormalTok{)}
+\FunctionTok{fplot}\NormalTok{(uh, u, npoints}\OperatorTok{=}\FloatTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plotten Sie darüber hinaus die Näherung für die Normalkraft \(N_h\)
+sowie den Fehler \(e = u - u_h\).
+
+\section{Konvergenz}\label{konvergenz}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Fehlerfunktion: Plotten Sie die Fehlerfunktion \(e = u - u_h\) für
+  \(k = 2, 4, 8, \dots, 2^5\) Elemente.
+
+  Tipp:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FloatTok{2} \OperatorTok{.\^{}}\NormalTok{ (}\FloatTok{1}\OperatorTok{:}\FloatTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Normalkraft: Stellen Sie in einem Plot die approximierte Normalkraft
+  \(N_h\) für \(k = 2, 4, 8, \dots, 2^5\) Elemente zusammen mit der
+  exakten Lösung \(N\) dar. Wie erklären Sie sich den Verlauf?
+
+  Tipp: Eine besser lesbare Darstellung erhalten Sie mit
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{fplot!}\NormalTok{(Nh, connect\_jumps}\OperatorTok{=}\ConstantTok{true}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+\item
+  Fehler in max-Norm: Berechnen und plotten Sie den prozentualen Fehler
+
+  \[
+   100 \cdot \frac{\|u - u_h\|_\mathrm{max}}{\|u\|_\mathrm{max}}
+   \]
+
+  für \(k = 2, 4, 8, \dots, 2^5\) Elemente.
+\end{enumerate}
+
+
+
+
+\end{document}

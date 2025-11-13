@@ -20,15 +20,28 @@ soll weiterhin erfüllt sein.
 Aufgaben:
 
 1. Skizzieren Sie die Basisfunktionen für $N_e = 3$ Elemente gleicher Länge. 
-1. Wie verläuft die Funktion $u_h = \sum \varphi_i\hat u_i$, wenn der Vektor der Knotenwerte mit 
+1. Wie verläuft die Funktion $u_h = \sum \hat u_i \cdot \varphi_i$, wenn der Vektor der Knotenwerte mit 
   $$
     \hat{\mathbf{u}} = (2, 1.5, 1, 2, 1, 1, 2)
   $$
   vorgegeben wird. 
-
 1. Was können Sie hier über die Differenzierbarkeit von $u_h$ sagen?
 
 Tipp: Schauen Sie sich nochmal die Lagrange-Polynome an. Diese Aufgabe erfordert keinerlei Rechnungen, Skizze reicht!
+
+## Basisfunktionen mit stetigen Ableitungen
+
+Für die Berechnung von Balkentragwerken mit Finiten Elementen werden Basisfunktionen benötigt, deren Ableitungen stetig sind. Grundlage hierfür sind die so genannten Hermite-Polynome
+
+![](bilder/hermite.png){width="70%"}
+
+deren Funktionswert oder deren Ableitung an den Enden entweder den Wert null oder eins hat.
+
+Aufgaben:
+
+1. Warum ist es physikalisch nicht möglich, dass die Durchbiegung von Biegebalken (ohne Gelenke) einen Knick hat?
+1. Kombinieren Sie die Hermite-Polynome abschnittsweise zu geeigneten Basisfunktionen
+1. Welche physikalische Interpretation besitzen dann die Koeffizienten $\hat{w}_i$ in der Linearkombination $w_h(x) = \sum \hat w_i \cdot \varphi(x)$?
 
 ## Erste Schritte in der FEM mit Julia
 
@@ -41,23 +54,15 @@ In einem ersten Schritt soll eine vorgegebene Funktion mithilfe abschnittsweise 
 
 Gehen Sie in den folgenden Schritten vor.
 
-1. Installation: Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und installieren Sie die Pakete `CairoMakie`, `IntervalSets` sowie `MMJMesh` mithilfe von
-
-    ```{.julia}
-    using Pkg
-    Pkg.add("CairoMakie")
-    Pkg.add("IntervalSets")
-    Pkg.add(url="https://github.com/matthiasbaitsch/mmjmesh.git")
-    ```
-
-    Sie können die Zeilen danach löschen, die Installation muss nur ein mal durchgeführt werden. Danach laden Sie die benötigten Pakete mit
+1. Installation: Erzeugen Sie ein Jupyter Notebook für dieses Aufgabenblatt und laden Sie in dem ersten Codeblock die benötigten Pakete.
 
     ```{.julia}
     using CairoMakie
-    using IntervalSets
     using MMJMesh.Plots
     using MMJMesh.Mathematics
     ```
+
+    Stellen Sie sicher, dass Sie eine Datei `Project.toml` in ihrem Ordner liegen haben (ggf. nachfragen).
 
     Nehmen Sie sich fünf Minuten Zeit um sich in der [Dokumentation](https://matthiasbaitsch.github.io/mmjmesh/guide/) ein wenig umzusehen. Beachten Sie, dass die Dokumentation noch in den Kinderschuhen steckt.
 
@@ -111,7 +116,7 @@ Gehen Sie in den folgenden Schritten vor.
     sum(a .* b)
     ```  
 
-    aus und überlegen Sie, was das helfen könnte.
+    aus und überlegen Sie, was das helfen könnte. Definieren Sie eine Julia Funktion `lc(uhat, phis)` um die Linearkombination einfach zu bestimmen.
 
 1. Approximation: Erzeugen Sie in Julia die Approximation
 
@@ -121,22 +126,13 @@ Gehen Sie in den folgenden Schritten vor.
 
     wobei $x_i$ die Stelle des $i$-ten Knotens ist. Plotten Sie $h$ und $h_a$ ein einem Koordinatensystem. Plotten Sie darüber hinaus die Fehlerfunktion $e = h - h_a$.
 
-1. Norm: Erstellen Sie eine Julia-Funktion `maxnorm(u)` die eine Approximation zu der Norm
+1. Norm: Erstellen Sie eine Julia-Funktion `norm2(u)`, die
 
     $$
-        \|u\|_\mathrm{max} = \max_{a \leq x \leq b} |u(x)|
+        \|u\|_2 = \int_0^{4\pi} \!\!\! u^2(x) \, \mathrm{d}x
     $$
 
-    berechnet. Unterteilen Sie dafür das Intervall, auf dem die Funktion definiert ist in eine große Zahl an Abschnitten. 
-
-    Berechnen Sie die Norm des Fehlers $e$.
-
-    Tipps:
-
-    - Die Definitionsmenge einer Funktion `u` erhalten Sie mit `domain(u)`
-    - Mit `range(0 .. 2, 101)` unterteilen Sie das Intervall $[0, 2]$ in 100 Abschnitte
-    - Den Absolutwert einer Zahl berechnet man mit `abs`. Wie könnte das für einen Vektor gehen?
-    - Die Funktion `maximum(v)` gibt das größte Element im Vektor `v` zurück
+    berechnet. Ermitteln Sie die damit Norm $\|e\|_2$ des Fehlers $e$.
 
 1. Konvergenz: Es soll untersucht werden, wie sich der Fehler verhält, wenn Sie die Anzahl der Basisfunktionen erhöhen. Erstellen Sie dafür eine Funktion `error(Ne)`, die den Approximationsfehler für `Ne` Elemente berechnet. Berechnen Sie den Fehler für $N_e = 4, 8, \dots, 2^{10}$. Plotten Sie den Fehler über
 
@@ -165,7 +161,7 @@ Gehen Sie in den folgenden Schritten vor.
 
       ```{.julia}
       f = Figure()
-      Axis(f[1,1], xscale=log10, yscale=log10)
+      Axis(f[1, 1], xscale=log10, yscale=log10)
       fplot!(mks...)
       f
       ```

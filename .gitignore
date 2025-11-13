@@ -9,3 +9,8 @@ videos
 /.quarto/
 *.zip
 .vscode
+out
+*.html
+*.pdf
+
+**/*.quarto_ipynb

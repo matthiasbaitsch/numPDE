@@ -8,12 +8,15 @@ subtitle: Numerische Lösung
 \newcommand{\num}[1]{#1}
 \newcommand{\newton}{\mathrm{N}}
 \newcommand{\metre}{\mathrm{m}}
+\newcommand{\milli}{\mathrm{m}}
 \newcommand{\per}{/}
 \newcommand{\squared}{^2}
 \newcommand{\kilo}{\mathrm{k}}
 \newcommand{\gram}{\mathrm{g}}
 \newcommand{\second}{\mathrm{s}}
 \newcommand{\tothe}[1]{^#1}
+
+## Bohrpfahl
 
 Wir lösen das Bohrpfahlproblem mit der Finite-Elemente-Methode für die folgenden Systemparameter:
 
@@ -39,22 +42,11 @@ $$
 
 ## Notebook einrichten
 
-Legen Sie ein Jupyter-Notebook für dieses Paket an.
-
-Installieren Sie falls notwendig fehlende Pakete; aktualisieren Sie auf jeden Fall die MMJMesh-Bibliothek:
-
-```{.julia}
-using Pkg
-Pkg.add("DotMaps")
-Pkg.update("MMJMesh")
-```
-
-Danach die folgenden Bibliotheken laden:
+Legen Sie ein Jupyter-Notebook für dieses Paket an und laden sie die folgenden Bibliotheken.
 
 ```{.julia}
 using DotMaps
 using CairoMakie
-using IntervalSets
 using MMJMesh.Plots
 using MMJMesh.Mathematics
 ```
@@ -92,11 +84,11 @@ $$
   {3500000 \cdot \pi \cdot  \left(a_1 \cdot e^2 - a_2\right)}
   \cdot
   \bigg(
-    25000 \cdot \big(a_1 \cdot e^2 + a_2 \cdot \exp(x/10)\big)
+    25000 \cdot \big(a_1 \cdot e^2 + a_2 \cdot \exp(x / 10)\big)
     \\[1em]
-    - 2943 \cdot \pi \cdot e \cdot \big(\exp(x/10) + 1\big)
+    - 2943 \cdot \pi \cdot e \cdot \big(\exp(x / 10) + 1\big)
     \\[1em]
-    + 981 \cdot \pi \cdot \exp(x/20) \cdot \big(a_1 \cdot e^2 - a_2\big)
+    + 981 \cdot \pi \cdot \exp(x / 20) \cdot \big(a_1 \cdot e^2 - a_2\big)
   \bigg).
 \end{multlined}
 $$
@@ -110,7 +102,7 @@ a1 = 99
 a2 = 99
 x = parameter(p.Ω)
 
-u = exp(x/20) + exp(-x/10)
+u = exp(x / 20) + exp(-x / 10)
 
 fplot(u, npoints=100)
 ```
@@ -189,3 +181,15 @@ Plotten Sie darüber hinaus die Näherung für die Normalkraft $N_h$ sowie den F
     $$
 
     für $k = 2, 4, 8, \dots, 2^5$ Elemente.
+
+
+## Elastisch gelagerter Balken
+
+Ermitteln Sie für den elastische gelagerten Balken aus Aufgabenblatt mit 
+
+$$
+  l = \SI{8}{\metre}, \quad q = \SI{50}{\kilo\newton\per\metre} \quad \text{und} \quad k = \SI{500}{\kilo\newton\per\milli\metre}
+$$ 
+
+aus Aufgabenblatt 2 eine FE-Lösung. Verwenden Sie ein IPE 300 Profil.
+

@@ -96,4 +96,4 @@ Bearbeiten Sie folgende Punkte:
 
     Tipp: Sie können die Formel zur Berechnung des Volumens einer Pyramide verwenden.
 
-1. Implementieren und testen Sie die Funktion \mc{heat_re}.
+1. Implementieren und testen Sie die Funktion `heat_re`.

@@ -15,7 +15,7 @@ Es soll die Temperaturverteilung einer Kreisscheibe mit homogenem Material und e
 
     Zur Kontrolle: Sie sollten rund 500 Knoten und 1000 Elemente erhalten.
 
-1. Berechnen Sie in der Datei \datei{heat\_plate.ipynb} die Näherungslösung der Temperaturverteilung für die Kreisplatte mit $r=2.2$, frei gewählten Parametern $\lambda$ und $w$ sowie einer vorgebenen Temperatur $\theta^* = 0$ auf dem Rand. Vergleichen Sie die maximale Temperatur mit der exakten Lösung
+1. Berechnen Sie in der Datei `heat_plate.ipynb` die Näherungslösung der Temperaturverteilung für die Kreisplatte mit $r=2.2$, frei gewählten Parametern $\lambda$ und $w$ sowie einer vorgebenen Temperatur $\theta^* = 0$ auf dem Rand. Vergleichen Sie die maximale Temperatur mit der exakten Lösung
     $$
     w_{\mathrm{max}} = \frac{w \cdot r^2}{4 \cdot \lambda}.
     $$
